@@ -12,7 +12,7 @@ const router = createRouter({
         title: 'Dashboard',
         breadcrumb: [
           { label: 'Home', to: '/' },
-          { label: 'Dashboard', to: '/' }
+          { label: 'Dashboard', to: '/' },
         ]
       }
     },

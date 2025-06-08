@@ -32,7 +32,7 @@
                         </svg>
                     </div>
                 </div>
-                <h4 class="logo-title">BUBBLE OASIS</h4>
+                <h5 class="logo-title">BUBBLE OASIS</h5>
             </router-link>
             <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
                 <i class="icon">

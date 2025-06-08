@@ -5,7 +5,7 @@
       <NAVBAR />
       <BREADCRUMB />
       <div class="conatiner-fluid  content-inner mt-n5 py-0">
-        <slot name="main-content"></slot>
+        <slot name="content"></slot>
       </div>
     </div>
   

@@ -1,9 +1,9 @@
 <template>
 
- <aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all ">
+    <aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all ">
         <div class="sidebar-header d-flex align-items-center justify-content-start">
-            <router-link to="/Dashboard" class="navbar-brand">
-               
+            <router-link to="/" class="navbar-brand">
+
 
                 <!--Logo start-->
                 <div class="logo-main">
@@ -32,7 +32,7 @@
                         </svg>
                     </div>
                 </div>
-                <h4 class="logo-title">Admin</h4>
+                <h4 class="logo-title">BUBBLE OASIS</h4>
             </router-link>
             <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
                 <i class="icon">
@@ -55,8 +55,9 @@
                             <span class="mini-icon">-</span>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <router-link to="/Dashboard" class="nav-link " aria-current="page" >
+                    <li class="nav-item ">
+                        <router-link to="/" class="nav-link" :class="{ active: route.path === '/' }"
+                            aria-current="page">
                             <i class="icon">
                                 <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                                     class="icon-20">
@@ -71,7 +72,7 @@
                             <span class="item-name">Dashboard</span>
                         </router-link>
                     </li>
-                 
+
                     <li>
                         <hr class="hr-horizontal">
                     </li>
@@ -119,15 +120,15 @@
                                     <span class="item-name">Billing</span>
                                 </a>
                             </li>
-                          
+
                         </ul>
                     </li>
-                  
-                  
+
+
                     <li>
                         <hr class="hr-horizontal">
                     </li>
-                  
+
                 </ul>
                 <!-- Sidebar Menu End -->
             </div>
@@ -136,3 +137,9 @@
     </aside>
 
 </template>
+
+<script setup>
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+</script>

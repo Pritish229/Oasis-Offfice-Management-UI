@@ -5,11 +5,18 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/Dashboard',
-      name: 'home',
-      component: ()=>import('@/views/Dashboard/Home.vue')
-    },
-   
+      path: '/',
+      name: 'Dashboard',
+      component: () => import('@/views/Dashboard/Home.vue'),
+      meta: {
+        title: 'Dashboard',
+        breadcrumb: [
+          { label: 'Home', to: '/' },
+          { label: 'Dashboard', to: '/' }
+        ]
+      }
+    }
+
   ],
 })
 

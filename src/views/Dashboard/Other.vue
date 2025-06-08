@@ -2,5 +2,5 @@
 </script>
 
 <template>
-  <h2>Welcome to Home page </h2>
+  <h2>Welcome to other page </h2>
 </template>

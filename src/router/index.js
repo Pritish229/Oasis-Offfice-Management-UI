@@ -15,7 +15,20 @@ const router = createRouter({
           { label: 'Dashboard', to: '/' }
         ]
       }
-    }
+    },
+    {
+      path: '/Other',
+      name: 'Other',
+      component: () => import('@/views/Dashboard/Other.vue'),
+      meta: {
+        title: 'Other',
+        breadcrumb: [
+          { label: 'Home', to: '/' },
+          { label: 'Other', to: '/Other' }
+        ]
+      }
+    },
+
 
   ],
 })

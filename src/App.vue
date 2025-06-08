@@ -1,14 +1,13 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import APPLayout from './components/LAYOUT/APPLayout.vue';
+
+
 </script>
 
 <template>
-  <header>
-  
-      <h2>Hello Dada </h2>
-  
-  </header>
+
+  <APPLayout />
 
   <RouterView />
 </template>
-

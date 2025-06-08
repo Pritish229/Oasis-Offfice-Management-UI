@@ -15,7 +15,7 @@ const breadcrumbs = computed(() => {
 </script>
 
 <template>
-  <div class="iq-navbar-header" style="min-height: 230px;">
+  <div class="iq-navbar-header" style="min-height: 15rem;">
     <div class="container-fluid iq-container">
       <div class="row">
         <div class="col-md-12">

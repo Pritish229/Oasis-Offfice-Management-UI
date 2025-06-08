@@ -132,20 +132,20 @@
                 <img src="/assets/images/settings/light/10.png" alt="image" class="mode light-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-target=".iq-navbar" data-name="navbar-type" data-value="nav-glass">
                 <span class="mt-2">Glass</span>
               </div>
-              <div class="text-center">
-                 <img src="/assets/images/settings/dark/10.png" alt="color" class="mode dark-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-target=".iq-navbar-header" data-name="navbar-type" data-value="navs-bg-color">
-                 <img src="/assets/images/settings/light/11.png" alt="color" class="mode light-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-target=".iq-navbar-header" data-name="navbar-type" data-value="navs-bg-color">
-                <span class="mt-2">Color</span>
-              </div>
               <div class=" text-center">
-                 <img src="/assets/images/settings/dark/12.png" alt="sticky" class="mode dark-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-target=".iq-navbar" data-name="navbar-type" data-value="navs-sticky">
-                 <img src="/assets/images/settings/light/12.png" alt="sticky" class="mode light-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-target=".iq-navbar" data-name="navbar-type" data-value="navs-sticky">
+                <img src="/assets/images/settings/dark/12.png" alt="sticky" class="mode dark-img img-fluid btn-border p-0 flex-column mb-2 active" data-setting="navbar" data-target=".iq-navbar" data-name="navbar-type" data-value="navs-sticky">
+                <img src="/assets/images/settings/light/12.png" alt="sticky" class="mode light-img img-fluid btn-border p-0 flex-column mb-2 active" data-setting="navbar" data-target=".iq-navbar" data-name="navbar-type" data-value="navs-sticky">
                 <span class="mt-2">Sticky</span>
               </div>
               <div class="text-center">
-                  <img src="/assets/images/settings/dark/13.png" alt="transparent" class="mode dark-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-target=".iq-navbar" data-name="navbar-type" data-value="navs-transparent">
-                  <img src="/assets/images/settings/light/13.png" alt="transparent" class="mode light-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-target=".iq-navbar" data-name="navbar-type" data-value="navs-transparent">
+                <img src="/assets/images/settings/dark/13.png" alt="transparent" class="mode dark-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-target=".iq-navbar" data-name="navbar-type" data-value="navs-transparent">
+                <img src="/assets/images/settings/light/13.png" alt="transparent" class="mode light-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-target=".iq-navbar" data-name="navbar-type" data-value="navs-transparent">
                 <span class="mt-2">Transparent</span>
+              </div>
+              <div class="text-center">
+                <img src="/assets/images/settings/dark/10.png" alt="color" class="mode dark-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-target=".iq-navbar" data-name="navbar-type" data-value="default">
+                <img src="/assets/images/settings/light/01.png" alt="color" class="mode light-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-name="navbar-default" data-value="default">
+                <span class="mt-2">Default</span>
               </div>
               <div class="btn btn-border active col-span-full mt-4 d-block" data-setting="navbar" data-name="navbar-default" data-value="default">
                 <span class=""> Default Navbar</span>

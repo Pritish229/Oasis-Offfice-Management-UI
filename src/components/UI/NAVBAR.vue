@@ -1,5 +1,5 @@
 <template>
-<nav class="nav navbar navbar-expand-lg navbar-light iq-navbar">
+<nav class="nav navbar navbar-expand-lg navbar-light iq-navbar navs-sticky">
         <div class="container-fluid navbar-inner">
           <a href="" class="navbar-brand">
             <div class="logo-main">

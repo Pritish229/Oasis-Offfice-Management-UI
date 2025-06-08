@@ -2,7 +2,7 @@
 
  <aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all ">
         <div class="sidebar-header d-flex align-items-center justify-content-start">
-            <a href="../../dashboard/index.html" class="navbar-brand">
+            <router-link to="/Dashboard" class="navbar-brand">
                
 
                 <!--Logo start-->
@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <h4 class="logo-title">Admin</h4>
-            </a>
+            </router-link>
             <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
                 <i class="icon">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -56,7 +56,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link " aria-current="page" href="../../dashboard/index.html">
+                        <router-link to="/Dashboard" class="nav-link " aria-current="page" >
                             <i class="icon">
                                 <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
                                     class="icon-20">
@@ -69,7 +69,7 @@
                                 </svg>
                             </i>
                             <span class="item-name">Dashboard</span>
-                        </a>
+                        </router-link>
                     </li>
                  
                     <li>

@@ -1,6 +1,10 @@
 <script setup>
+import { RouterLink, RouterView } from 'vue-router'
+import APPLayout from '@/components/LAYOUT/APPLayout.vue'
 </script>
 
 <template>
-  <h2>Welcome to Home page </h2>
+  <div class="card p-4">
+        Welcome to Home
+      </div>
 </template>

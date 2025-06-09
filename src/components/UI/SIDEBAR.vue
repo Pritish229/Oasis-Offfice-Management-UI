@@ -1,6 +1,6 @@
 <template>
 
-    <aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all ">
+    <aside :class="sidebarClasses">
         <div class="sidebar-header d-flex align-items-center justify-content-start">
             <router-link to="/app/dashboard" class="navbar-brand">
 
@@ -157,10 +157,40 @@
 
 <script setup>
 import { useRoute } from 'vue-router';
-import { computed } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount  } from 'vue';
+const isMobile = ref(false)
+
+const checkScreenSize = () => {
+  isMobile.value = window.innerWidth <= 768
+}
+
+onMounted(() => {
+  checkScreenSize()
+  window.addEventListener('resize', checkScreenSize)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', checkScreenSize)
+})
+
+// Computed class list
+const sidebarClasses = computed(() => {
+  const baseClasses = [
+    'sidebar',
+    'sidebar-default',
+    'sidebar-white',
+    'sidebar-base',
+    'navs-rounded-all'
+  ]
+
+  if (isMobile.value) {
+    baseClasses.push('sidebar-mini')
+  }
+
+  return baseClasses
+})
 
 const route = useRoute();
 
-const isDashboard = computed(() => route.path === '/dashboard');
-const isOther = computed(() => route.path === '/Other');
+
 </script>

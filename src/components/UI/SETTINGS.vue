@@ -133,8 +133,8 @@
                 <span class="mt-2">Glass</span>
               </div>
               <div class=" text-center">
-                <img src="/assets/images/settings/dark/12.png" alt="sticky" class="mode dark-img img-fluid btn-border p-0 flex-column mb-2 active" data-setting="navbar" data-target=".iq-navbar" data-name="navbar-type" data-value="navs-sticky">
-                <img src="/assets/images/settings/light/12.png" alt="sticky" class="mode light-img img-fluid btn-border p-0 flex-column mb-2 active" data-setting="navbar" data-target=".iq-navbar" data-name="navbar-type" data-value="navs-sticky">
+                <img src="/assets/images/settings/dark/12.png" alt="sticky" class="mode dark-img img-fluid btn-border p-0 flex-column mb-2 " data-setting="navbar" data-target=".iq-navbar" data-name="navbar-type" data-value="navs-sticky">
+                <img src="/assets/images/settings/light/12.png" alt="sticky" class="mode light-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-target=".iq-navbar" data-name="navbar-type" data-value="navs-sticky">
                 <span class="mt-2">Sticky</span>
               </div>
               <div class="text-center">
@@ -147,7 +147,7 @@
                 <img src="/assets/images/settings/light/01.png" alt="color" class="mode light-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-name="navbar-default" data-value="default">
                 <span class="mt-2">Default</span>
               </div>
-              <div class="btn btn-border active col-span-full mt-4 d-block" data-setting="navbar" data-name="navbar-default" data-value="default">
+              <div class="btn btn-border  col-span-full mt-4 d-block" data-setting="navbar" data-name="navbar-default" data-value="default">
                 <span class=""> Default Navbar</span>
               </div>
             </div>

@@ -50,14 +50,29 @@ const router = createRouter({
 })
 
 // 🔐 Navigation Guard
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const auth = useAuthStore()
+  const token = localStorage.getItem('token')
 
-  if (to.meta.requiresAuth && !auth.isAuthenticated) {
-    next('/login')
-  } else {
-    next()
+  // Try to restore auth state if token exists but store is not authenticated
+  if (token && !auth.isAuthenticated) {
+    try {
+      await auth.restoreUserFromToken(token) // implement this in store if needed
+    } catch (e) {
+      localStorage.removeItem('token')
+      return next('/login')
+    }
   }
+  if (to.meta.requiresAuth && !token) {
+    return next('/login')
+  }
+
+  // Redirect from login if already authenticated
+  if (to.path === '/login' && token) {
+    return next('/app/dashboard')
+  }
+
+  next()
 })
 
 export default router

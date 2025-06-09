@@ -84,8 +84,8 @@
               </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="/dashboard/app/user-profile.html">Profile</a></li>
-              <li><a class="dropdown-item" href="/dashboard/app/user-privacy-setting.html">Privacy Setting</a>
+              <li><a class="dropdown-item" href="">Profile</a></li>
+              <li><a class="dropdown-item" href="">Privacy Setting</a>
               </li>
               <li>
                 <hr class="dropdown-divider">
@@ -103,8 +103,8 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router'
 import Swal from 'sweetalert2'
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
@@ -118,9 +118,20 @@ const logout = async () => {
   })
 
   if (result.isConfirmed) {
+    // Clear token
     localStorage.removeItem('token')
-    await Swal.fire('Logged out!', 'You have been logged out successfully.', 'success')
-    router.push('/login')
+
+    // Show success message and wait until user closes it
+    await Swal.fire({
+      title: 'Logged out!',
+      text: 'You have been logged out successfully.',
+      icon: 'success',
+      confirmButtonText: 'OK',
+    })
+
+    // ✅ Navigate after alert is fully closed
+    router.push('/')
   }
 }
+
 </script>

@@ -3,25 +3,19 @@
     <div class="card">
       <h2>Login</h2>
       <form @submit.prevent="handleLogin">
-        <label for="email">Username</label>
-        <input
-          type="text"
-          id="email"
-          v-model="email"
-          placeholder="Enter your email"
-        />
+        <label for="email">Email</label>
+        <input type="email" id="email" v-model="email" placeholder="Enter your email" />
         <span v-if="emailError" class="error">{{ emailError }}</span>
 
         <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          v-model="password"
-          placeholder="Enter your password"
-        />
+        <input type="password" id="password" v-model="password" placeholder="Enter your password" />
         <span v-if="passwordError" class="error">{{ passwordError }}</span>
 
-        <button type="submit">Login</button>
+        <span v-if="loginError" class="error">{{ loginError }}</span>
+
+        <button type="submit" :disabled="loading">
+          {{ loading ? 'Logging in...' : 'Login' }}
+        </button>
       </form>
       <div class="switch">
         Forget password? <a href="#">Recover it</a>
@@ -39,23 +33,42 @@ const email = ref('')
 const password = ref('')
 const emailError = ref('')
 const passwordError = ref('')
+const loginError = ref('')
+const loading = ref(false)
 const auth = useAuthStore()
 const router = useRouter()
+
+const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 
 const handleLogin = async () => {
   emailError.value = ''
   passwordError.value = ''
+  loginError.value = ''
+  loading.value = true
 
-  if (!email.value) emailError.value = 'Email is required'
-  if (!password.value) passwordError.value = 'Password is required'
-  if (emailError.value || passwordError.value) return
+  if (!email.value) {
+    emailError.value = 'Email is required'
+  } else if (!isValidEmail(email.value)) {
+    emailError.value = 'Invalid email format'
+  }
+
+  if (!password.value) {
+    passwordError.value = 'Password is required'
+  }
+
+  if (emailError.value || passwordError.value) {
+    loading.value = false
+    return
+  }
+
   try {
     await auth.login({ email: email.value, password: password.value })
-    router.push('/dashboard') 
+    router.push('app/dashboard')
   } catch (err) {
-    console.log(err);
-    const msg = err.response?.data?.message || 'Login failed'
-    
+    const msg = err.response?.data?.message || 'Login failed. Please try again.'
+    loginError.value = msg
+  } finally {
+    loading.value = false
   }
 }
 </script>
@@ -106,6 +119,11 @@ button {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
 }
 
 .switch {

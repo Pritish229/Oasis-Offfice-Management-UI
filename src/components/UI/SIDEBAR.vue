@@ -2,7 +2,7 @@
 
     <aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all ">
         <div class="sidebar-header d-flex align-items-center justify-content-start">
-            <router-link to="/" class="navbar-brand">
+            <router-link to="/app/dashboard" class="navbar-brand">
 
 
                 <!--Logo start-->
@@ -56,7 +56,7 @@
                         </a>
                     </li>
                     <li class="nav-item ">
-                        <router-link to="/dashboard" class="nav-link" :class="{ active: route.path === '/dashboard' }"
+                        <router-link to="/app/dashboard" class="nav-link" :class="{ active: route.path === '/app/dashboard' }"
                             aria-current="page">
                             <i class="icon">
                                 <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -73,7 +73,7 @@
                         </router-link>
                     </li>
                     <li class="nav-item ">
-                        <router-link to="/Other" class="nav-link" :class="{ active: route.path === '/Other' }"
+                        <router-link to="/app/Other" class="nav-link" :class="{ active: route.path === '/app/Other' }"
                             aria-current="page">
                             <i class="icon">
                                 <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"

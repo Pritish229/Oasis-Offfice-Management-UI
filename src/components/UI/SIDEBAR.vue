@@ -56,7 +56,7 @@
                         </a>
                     </li>
                     <li class="nav-item ">
-                        <router-link to="/" class="nav-link" :class="{ active: route.path === '/' }"
+                        <router-link to="/dashboard" class="nav-link" :class="{ active: route.path === '/dashboard' }"
                             aria-current="page">
                             <i class="icon">
                                 <svg width="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -157,6 +157,10 @@
 
 <script setup>
 import { useRoute } from 'vue-router';
+import { computed } from 'vue';
 
 const route = useRoute();
+
+const isDashboard = computed(() => route.path === '/dashboard');
+const isOther = computed(() => route.path === '/Other');
 </script>

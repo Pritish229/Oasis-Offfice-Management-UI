@@ -4,11 +4,7 @@ import APPLayout from '@/components/LAYOUT/APPLayout.vue'
 </script>
 
 <template>
-  <APPLayout>
-    <template #content>
-      <div class="card p-4">
-        <RouterView />
+  <div class="card p-4">
+        Welcome to Home
       </div>
-    </template>
-  </APPLayout>
 </template>

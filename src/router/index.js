@@ -12,30 +12,35 @@ const routes = [
     component: () => import('@/views/Auth/Login.vue')
   },
   {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: () => import('@/views/Dashboard/Home.vue'),
-    meta: {
-      requiresAuth: true,
-      title: 'Dashboard',
-      breadcrumb: [
-        { label: 'Home', to: '/' },
-        { label: 'Dashboard', to: '/dashboard' }
-      ]
-    }
-  },
-  {
-    path: '/other',
-    name: 'Other',
-    component: () => import('@/views/Dashboard/Other.vue'),
-    meta: {
-      requiresAuth: true,
-      title: 'Other',
-      breadcrumb: [
-        { label: 'Home', to: '/' },
-        { label: 'Other', to: '/other' }
-      ]
-    }
+    path: '/app',
+    component: () => import('@/components/LAYOUT/APPLayout.vue'),
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: 'dashboard',
+        name: 'Dashboard',
+        component: () => import('@/views/Dashboard/Home.vue'),
+        meta: {
+          title: 'Dashboard',
+          breadcrumb: [
+            { label: 'Home', to: '/' },
+            { label: 'Dashboard', to: '/app/dashboard' }
+          ]
+        }
+      },
+      {
+        path: 'other',
+        name: 'Other',
+        component: () => import('@/views/Dashboard/Other.vue'),
+        meta: {
+          title: 'Other',
+          breadcrumb: [
+            { label: 'Home', to: '/' },
+            { label: 'Other', to: '/app/other' }
+          ]
+        }
+      }
+    ]
   }
 ]
 

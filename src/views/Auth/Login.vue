@@ -17,8 +17,8 @@
           {{ loading ? 'Logging in...' : 'Login' }}
         </button>
       </form>
-      <div class="switch">
-        Forget password? <a href="#">Recover it</a>
+      <div class="switch" style="display: flex; justify-content: end;">
+       <a href="#">Forget Password?</a>
       </div>
     </div>
   </div>

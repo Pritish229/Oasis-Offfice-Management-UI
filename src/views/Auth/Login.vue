@@ -1,3 +1,32 @@
+<<<<<<< Updated upstream
+=======
+<template>
+  <div class="container">
+    <div class="card">
+      <h2>Login</h2>
+      <form @submit.prevent="handleLogin">
+        <label for="email">Email</label>
+        <input type="email" id="email" v-model="email" placeholder="Enter your email" />
+        <span v-if="emailError" class="error">{{ emailError }}</span>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" v-model="password" placeholder="Enter your password" />
+        <span v-if="passwordError" class="error">{{ passwordError }}</span>
+
+        <span v-if="loginError" class="error">{{ loginError }}</span>
+
+        <button type="submit" :disabled="loading">
+          {{ loading ? 'Logging in...' : 'Login' }}
+        </button>
+      </form>
+      <div class="switch">
+        Forget password? <a @click.prevent="router.push('/auth/recover-password')" href="#">Recover it</a>
+      </div>
+    </div>
+  </div>
+</template>
+
+>>>>>>> Stashed changes
 <script setup>
 import { ref } from 'vue'
 import input from '@/components/prop/input.vue'

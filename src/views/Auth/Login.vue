@@ -17,9 +17,9 @@
           {{ loading ? 'Logging in...' : 'Login' }}
         </button>
       </form>
-      <div class="switch">
-        Forget password? <a href="#">Recover it</a>
-      </div>
+<div class="switch">
+  Forget password? <a @click.prevent="router.push('/auth/reset-password')" href="#">Recover it</a>
+</div>
     </div>
   </div>
 </template>

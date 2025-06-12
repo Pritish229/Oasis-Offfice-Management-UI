@@ -6,6 +6,7 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null,
     token: localStorage.getItem('token') || null,
+    permissions: []
   }),
 
   getters: {
@@ -13,14 +14,16 @@ export const useAuthStore = defineStore('auth', {
   },
 
   actions: {
-    async login({ email, password }) {
+    async login({ identifier, password }) {
       try {
-        const res = await axios.post(`${API_URL}/auth/login`, { email, password })
-        this.token = res.data.token
-        this.user = res.data.user
-        localStorage.setItem('token', this.token)
+        const res = await axios.post(`${API_URL}/auth/login`, { identifier, password })
 
+        this.token = res.data.token
+        localStorage.setItem('token', this.token)
         axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
+
+        // Now fetch profile separately
+        await this.fetchProfile()
       } catch (err) {
         throw new Error(err.response?.data?.message || 'Login failed')
       }
@@ -34,6 +37,7 @@ export const useAuthStore = defineStore('auth', {
           }
         })
         this.user = res.data
+        this.permissions = (res.data.permissions || []).map(p => p.name)
       } catch (err) {
         throw new Error('Failed to fetch profile')
       }
@@ -42,6 +46,7 @@ export const useAuthStore = defineStore('auth', {
     logout() {
       this.token = null
       this.user = null
+      this.permissions = []
       localStorage.removeItem('token')
       delete axios.defaults.headers.common['Authorization']
     }

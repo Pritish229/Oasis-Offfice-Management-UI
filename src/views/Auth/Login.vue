@@ -3,9 +3,9 @@
     <div class="card">
       <h2>Login</h2>
       <form @submit.prevent="handleLogin">
-        <label for="email">Email</label>
-        <input type="email" id="email" v-model="email" placeholder="Enter your email" />
-        <span v-if="emailError" class="error">{{ emailError }}</span>
+        <label for="identifier">Email or Username</label>
+        <input type="text" id="identifier" v-model="identifier" placeholder="Enter your email or username" />
+        <span v-if="identifierError" class="error">{{ identifierError }}</span>
 
         <label for="password">Password</label>
         <input type="password" id="password" v-model="password" placeholder="Enter your password" />
@@ -18,7 +18,7 @@
         </button>
       </form>
       <div class="switch" style="display: flex; justify-content: end;">
-       <a href="#">Forget Password?</a>
+        <router-link to="/Reset-Password">Forget Password?</router-link>
       </div>
     </div>
   </div>
@@ -26,52 +26,55 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
-const email = ref('')
+const router = useRouter()
+const auth = useAuthStore()
+
+const identifier = ref('')
 const password = ref('')
-const emailError = ref('')
+const identifierError = ref('')
 const passwordError = ref('')
 const loginError = ref('')
 const loading = ref(false)
-const auth = useAuthStore()
-const router = useRouter()
 
-const isValidEmail = (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+const isValidInput = (value) => value.trim().length > 0
 
 const handleLogin = async () => {
-  emailError.value = ''
+  identifierError.value = ''
   passwordError.value = ''
   loginError.value = ''
   loading.value = true
 
-  if (!email.value) {
-    emailError.value = 'Email is required'
-  } else if (!isValidEmail(email.value)) {
-    emailError.value = 'Invalid email format'
+  if (!identifier.value || !isValidInput(identifier.value)) {
+    identifierError.value = 'Email or username is required'
   }
 
   if (!password.value) {
     passwordError.value = 'Password is required'
   }
 
-  if (emailError.value || passwordError.value) {
+  if (identifierError.value || passwordError.value) {
     loading.value = false
     return
   }
 
   try {
-    await auth.login({ email: email.value, password: password.value })
-    router.push('app/dashboard')
+    await auth.login({ identifier: identifier.value, password: password.value })
+    router.push('/app/dashboard')
   } catch (err) {
-    const msg = err.response?.data?.message || 'Login failed. Please try again.'
-    loginError.value = msg
-  } finally {
+  console.error('Login Error:', err)
+  console.error('Response:', err.response?.data)
+  const msg = err.response?.data?.message || 'Login failed. Please try again.'
+  loginError.value = msg
+}
+ finally {
     loading.value = false
   }
 }
 </script>
+
 
 <style scoped>
 .container {

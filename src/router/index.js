@@ -12,6 +12,16 @@ const routes = [
     component: () => import('@/views/Auth/Login.vue')
   },
   {
+    path: '/Reset-Password',
+    name: 'Reset-password',
+    component: () => import('@/views/Auth/ResetPassword.vue')
+  },
+  // {
+  //   path: '/unauthorized',
+  //   name: 'Unauthorized',
+  //   component: () => import('@/views/Auth/Unauthorized.vue') // Create this page if needed
+  // },
+  {
     path: '/app',
     component: () => import('@/components/LAYOUT/APPLayout.vue'),
     meta: { requiresAuth: true },
@@ -21,6 +31,8 @@ const routes = [
         name: 'Dashboard',
         component: () => import('@/views/Dashboard/Home.vue'),
         meta: {
+          requiresAuth: true,
+          permissions: ['view-dashboard'],
           title: 'Dashboard',
           breadcrumb: [
             { label: 'Home', to: '/' },
@@ -33,6 +45,8 @@ const routes = [
         name: 'Other',
         component: () => import('@/views/Dashboard/Other.vue'),
         meta: {
+          requiresAuth: true,
+          permissions: ['view-profile'],
           title: 'Other',
           breadcrumb: [
             { label: 'Home', to: '/' },
@@ -49,27 +63,33 @@ const router = createRouter({
   routes
 })
 
-// 🔐 Navigation Guard
+// 🔐 Global Route Guard
 router.beforeEach(async (to, from, next) => {
   const auth = useAuthStore()
   const token = localStorage.getItem('token')
 
-  // Try to restore auth state if token exists but store is not authenticated
-  if (token && !auth.isAuthenticated) {
+  if (token && !auth.user) {
     try {
-      await auth.restoreUserFromToken(token) // implement this in store if needed
+      await auth.fetchProfile()
     } catch (e) {
       localStorage.removeItem('token')
       return next('/login')
     }
   }
+
   if (to.meta.requiresAuth && !token) {
     return next('/login')
   }
 
-  // Redirect from login if already authenticated
   if (to.path === '/login' && token) {
     return next('/app/dashboard')
+  }
+
+  if (to.meta.permissions && token) {
+    const hasPermissions = to.meta.permissions.every(p => auth.permissions.includes(p))
+    if (!hasPermissions) {
+      return next('/unauthorized')
+    }
   }
 
   next()

@@ -147,9 +147,6 @@
                 <img src="/assets/images/settings/light/01.png" alt="color" class="mode light-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-name="navbar-default" data-value="default">
                 <span class="mt-2">Default</span>
               </div>
-              <div class="btn btn-border  col-span-full mt-4 d-block" data-setting="navbar" data-name="navbar-default" data-value="default">
-                <span class=""> Default Navbar</span>
-              </div>
             </div>
           </div>
         </div>

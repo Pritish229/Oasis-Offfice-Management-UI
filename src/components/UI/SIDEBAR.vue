@@ -147,7 +147,6 @@
                     </li>
 
                 </ul>
-                <!-- Sidebar Menu End -->
             </div>
         </div>
         <div class="sidebar-footer"></div>

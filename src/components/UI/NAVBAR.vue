@@ -79,8 +79,8 @@
               <img src="/assets/images/avatars/avtar_3.png" alt="User-Profile"
                 class="theme-color-pink-img img-fluid avatar avatar-50 avatar-rounded">
               <div class="caption ms-3 d-none d-md-block ">
-                <h6 class="mb-0 caption-title">Pritish</h6>
-                <p class="mb-0 caption-sub-title">Super Admin</p>
+                <h6 class="mb-0 caption-title">{{ userDetails.email }}</h6>
+                <p class="mb-0 caption-sub-title">{{ userDetails.username }}</p>
               </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -105,6 +105,33 @@
 <script setup>
 import Swal from 'sweetalert2'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
+import { onMounted,ref,reactive } from 'vue'
+
+const auth = useAuthStore()
+const rolesName = ref([]);
+
+const userDetails = reactive({
+  username : '',
+  email:'',
+  fullName:'',
+  gender:'',
+  maritalStatus:'',
+}) 
+
+
+const fatchuser = async () => {
+  const user = await auth.user;
+  
+  userDetails.username = user.username
+  userDetails.email = user.email
+  
+}
+
+onMounted( () => {
+ fatchuser()
+})
+
 
 const router = useRouter()
 
@@ -115,13 +142,12 @@ const logout = async () => {
     showCancelButton: true,
     confirmButtonText: 'Yes, logout',
     cancelButtonText: 'Cancel',
+    confirmButtonColor: "red",
   })
 
   if (result.isConfirmed) {
-    // Clear token
     localStorage.removeItem('token')
 
-    // Show success message and wait until user closes it
     await Swal.fire({
       title: 'Logged out!',
       text: 'You have been logged out successfully.',
@@ -129,9 +155,10 @@ const logout = async () => {
       confirmButtonText: 'OK',
     })
 
-    // ✅ Navigate after alert is fully closed
     router.push('/')
   }
 }
+
+
 
 </script>

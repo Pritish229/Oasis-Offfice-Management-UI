@@ -1,6 +1,11 @@
 html {
-  font-size: 85.5%; /* 87.5% of 16px = 14px */
+  font-size: 85.5%; /* Default for larger screens */
 }
 .breadcrumb-item.active {
     color: #bcc4ca;
+}
+@media (max-width: 767px) {
+  html {
+    font-size: 100%; /* 16px on phone screens */
+  }
 }

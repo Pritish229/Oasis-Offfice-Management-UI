@@ -12,6 +12,16 @@ const routes = [
     component: () => import('@/views/Auth/Login.vue')
   },
   {
+    path: '/Reset-Password',
+    name: 'Reset-password',
+    component: () => import('@/views/Auth/ResetPassword.vue')
+  },
+  {
+    path: '/unauthorized',
+    name: 'Unauthorized',
+    component: () => import('@/views/Auth/Unauthorized.vue')
+  },
+  {
     path: '/app',
     component: () => import('@/components/LAYOUT/APPLayout.vue'),
     meta: { requiresAuth: true },
@@ -21,6 +31,8 @@ const routes = [
         name: 'Dashboard',
         component: () => import('@/views/Dashboard/Home.vue'),
         meta: {
+          requiresAuth: true,
+          permissions: ['view-dashboard'],
           title: 'Dashboard',
           breadcrumb: [
             { label: 'Home', to: '/' },
@@ -29,14 +41,16 @@ const routes = [
         }
       },
       {
-        path: 'other',
-        name: 'Other',
-        component: () => import('@/views/Dashboard/Other.vue'),
+        path: 'manage-users',
+        name: 'ManageUsers',
+        component: () => import('@/views/Dashboard/MangeUsers/UserList.vue'),
         meta: {
-          title: 'Other',
+          requiresAuth: true,
+          permissions: ['manage-users'],
+          title: 'Manage Users',
           breadcrumb: [
-            { label: 'Home', to: '/' },
-            { label: 'Other', to: '/app/other' }
+            { label: 'Home', to: '/app/dashboard' },
+            { label: 'Manage Users', to: '/app/manage-users' }
           ]
         }
       }
@@ -49,30 +63,37 @@ const router = createRouter({
   routes
 })
 
-// 🔐 Navigation Guard
 router.beforeEach(async (to, from, next) => {
   const auth = useAuthStore()
   const token = localStorage.getItem('token')
 
-  // Try to restore auth state if token exists but store is not authenticated
-  if (token && !auth.isAuthenticated) {
+  if (token && !auth.user) {
     try {
-      await auth.restoreUserFromToken(token) // implement this in store if needed
+      await auth.fetchProfile()
     } catch (e) {
-      localStorage.removeItem('token')
+      auth.logout()
       return next('/login')
     }
   }
-  if (to.meta.requiresAuth && !token) {
+
+  if (to.meta.requiresAuth && !auth.isAuthenticated) {
     return next('/login')
   }
 
-  // Redirect from login if already authenticated
-  if (to.path === '/login' && token) {
+  if (to.path === '/login' && auth.isAuthenticated) {
     return next('/app/dashboard')
+  }
+
+  if (to.meta.permissions && to.meta.permissions.length > 0) {
+    const hasPermissions = to.meta.permissions.every(p => auth.permissions.includes(p))
+    if (!hasPermissions) {
+      return next('/unauthorized')
+    }
   }
 
   next()
 })
 
+// ✅ Export both default and named for flexibility
+export { router }
 export default router

@@ -11,6 +11,9 @@ export const useAuthStore = defineStore('auth', {
 
   getters: {
     isAuthenticated: (state) => !!state.token,
+    hasPermission: (state) => (permission) => {
+      return state.permissions.includes(permission)
+    }
   },
 
   actions: {
@@ -22,7 +25,6 @@ export const useAuthStore = defineStore('auth', {
         localStorage.setItem('token', this.token)
         axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
 
-        // Now fetch profile separately
         await this.fetchProfile()
       } catch (err) {
         throw new Error(err.response?.data?.message || 'Login failed')
@@ -36,9 +38,14 @@ export const useAuthStore = defineStore('auth', {
             Authorization: `Bearer ${this.token}`
           }
         })
+
         this.user = res.data
         this.permissions = (res.data.permissions || []).map(p => p.name)
+
+        // Optionally set axios header globally
+        axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
       } catch (err) {
+        this.logout()
         throw new Error('Failed to fetch profile')
       }
     },
@@ -49,6 +56,16 @@ export const useAuthStore = defineStore('auth', {
       this.permissions = []
       localStorage.removeItem('token')
       delete axios.defaults.headers.common['Authorization']
+    },
+
+    async initialize() {
+      if (this.token && !this.user) {
+        try {
+          await this.fetchProfile()
+        } catch (err) {
+          this.logout()
+        }
+      }
     }
   }
 })

@@ -19,7 +19,7 @@ const routes = [
   {
     path: '/unauthorized',
     name: 'Unauthorized',
-    component: () => import('@/views/Auth/Unauthorized.vue') // Create this page if needed
+    component: () => import('@/views/Auth/Unauthorized.vue')
   },
   {
     path: '/app',
@@ -49,7 +49,7 @@ const routes = [
           permissions: ['manage-users'],
           title: 'Manage Users',
           breadcrumb: [
-            { label: 'Home', to: 'app/dashboard' },
+            { label: 'Home', to: '/app/dashboard' },
             { label: 'Manage Users', to: '/app/manage-users' }
           ]
         }
@@ -63,7 +63,6 @@ const router = createRouter({
   routes
 })
 
-// 🔐 Global Route Guard
 router.beforeEach(async (to, from, next) => {
   const auth = useAuthStore()
   const token = localStorage.getItem('token')
@@ -72,20 +71,20 @@ router.beforeEach(async (to, from, next) => {
     try {
       await auth.fetchProfile()
     } catch (e) {
-      localStorage.removeItem('token')
+      auth.logout()
       return next('/login')
     }
   }
 
-  if (to.meta.requiresAuth && !token) {
+  if (to.meta.requiresAuth && !auth.isAuthenticated) {
     return next('/login')
   }
 
-  if (to.path === '/login' && token) {
+  if (to.path === '/login' && auth.isAuthenticated) {
     return next('/app/dashboard')
   }
 
-  if (to.meta.permissions && token) {
+  if (to.meta.permissions && to.meta.permissions.length > 0) {
     const hasPermissions = to.meta.permissions.every(p => auth.permissions.includes(p))
     if (!hasPermissions) {
       return next('/unauthorized')
@@ -95,4 +94,6 @@ router.beforeEach(async (to, from, next) => {
   next()
 })
 
+// ✅ Export both default and named for flexibility
+export { router }
 export default router

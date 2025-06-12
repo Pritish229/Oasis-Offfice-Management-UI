@@ -152,8 +152,8 @@ const logout = async () => {
     if (router.currentRoute.value.path !== '/') {
       router.push('/')
     } else {
-      // Force component reload without full page reload
-      router.replace({ path: '/redirect-dummy' }).then(() => {
+
+      router.replace({ path: '/login' }).then(() => {
         router.replace('/')
       })
     }

@@ -16,11 +16,11 @@ const routes = [
     name: 'Reset-password',
     component: () => import('@/views/Auth/ResetPassword.vue')
   },
-  // {
-  //   path: '/unauthorized',
-  //   name: 'Unauthorized',
-  //   component: () => import('@/views/Auth/Unauthorized.vue') // Create this page if needed
-  // },
+  {
+    path: '/unauthorized',
+    name: 'Unauthorized',
+    component: () => import('@/views/Auth/Unauthorized.vue') // Create this page if needed
+  },
   {
     path: '/app',
     component: () => import('@/components/LAYOUT/APPLayout.vue'),
@@ -41,16 +41,16 @@ const routes = [
         }
       },
       {
-        path: 'other',
-        name: 'Other',
-        component: () => import('@/views/Dashboard/Other.vue'),
+        path: 'manage-users',
+        name: 'ManageUsers',
+        component: () => import('@/views/Dashboard/MangeUsers/UserList.vue'),
         meta: {
           requiresAuth: true,
-          permissions: ['view-profile'],
-          title: 'Other',
+          permissions: ['manage-users'],
+          title: 'Manage Users',
           breadcrumb: [
-            { label: 'Home', to: '/' },
-            { label: 'Other', to: '/app/other' }
+            { label: 'Home', to: 'app/dashboard' },
+            { label: 'Manage Users', to: '/app/manage-users' }
           ]
         }
       }

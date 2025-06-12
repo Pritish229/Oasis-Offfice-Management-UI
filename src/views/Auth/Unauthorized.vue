@@ -6,7 +6,7 @@
                 <h3 class="text-white">Unauthorized Access</h3>
                 <h2 class="mb-0 mt-4 text-white">You do not have the Permission To access This Page </h2>
                 <p class="mt-2 text-white">Please Contact to the Admin</p>
-                <button class="btn bg-white text-primary d-inline-flex align-items-center" @click="goBack()">Back to
+                <button class="btn bg-white text-primary d-inline-flex align-items-center" @click="$router.back()">Back to
                     Home</button>
             </div>
             <div class="box">
@@ -26,11 +26,6 @@
 </template>
 
 <script setup>
-import { useRoute, useRouter } from 'vue-router';
 
-const goBack = () =>{
-    const router = useRouter();
-    router.go(-1);
-}
 
 </script>

@@ -57,7 +57,9 @@
 import { ref, computed, onUnmounted } from 'vue'
 import axios from 'axios'
 import { API_URL } from '@/config/path.js'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const email = ref('')
 const otp = ref('')
 const sendLoading = ref(false)
@@ -140,16 +142,20 @@ const verifyOtp = async () => {
       email: email.value,
       otp: otp.value
     }
-
-    console.log('Verifying OTP with payload:', payload)
-
-    alert('OTP verified. Redirecting to reset password page.')
+    const response = await axios.post(`${API_URL}/password/verify-reset-otp`, payload)
+    if (response.status === 200) {
+      localStorage.setItem('otp_verified', 'true')
+      localStorage.setItem('verified_email', email.value)
+      router.push('/reset-password/new') 
+    }
+    // Simulate success
   } catch (err) {
     console.error(err)
   } finally {
     verifyLoading.value = false
   }
 }
+
 </script>
 
 <style scoped>

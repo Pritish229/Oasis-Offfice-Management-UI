@@ -12,7 +12,7 @@ const routes = [
     component: () => import('@/views/Auth/Login.vue')
   },
   {
-    path: '/reset-password/new',
+    path: '/reset-password/new/:useremail',
     component: () => import('@/views/Auth/SetNewPassword.vue'),
     beforeEnter: (to, from, next) => {
       const verified = localStorage.getItem('otp_verified') === 'true'

@@ -28,18 +28,18 @@
 
         <label for="otp">OTP</label>
         <div style="position: relative;">
-          <input type="text" id="otp" v-model="otp" placeholder="Enter OTP" />
-          <div class="countdown" v-if="countdown > 0">
+          <input type="text" id="otp" v-model="otp" placeholder="Enter OTP" :disabled="isAccountDisabled" />
+          <div class="countdown" v-if="countdown > 0 && !isAccountDisabled">
             {{ formattedTime }}
           </div>
         </div>
         <p v-if="otpError" class="error-msg">{{ otpError }}</p>
 
-        <button type="submit" :disabled="verifyLoading">
+        <button type="submit" :disabled="verifyLoading || isAccountDisabled">
           {{ verifyLoading ? 'Verifying...' : 'Verify OTP' }}
         </button>
 
-        <div v-if="countdown <= 0" class="resend-container">
+        <div v-if="countdown <= 0 && !isAccountDisabled" class="resend-container">
           <a href="javascript:void(0)" class="resend-link" @click="!sendLoading && sendOtp()">
             {{ sendLoading ? 'Sending...' : 'Resend OTP' }}
           </a>
@@ -65,6 +65,8 @@ const otp = ref('')
 const sendLoading = ref(false)
 const verifyLoading = ref(false)
 const isvalidotp = ref(false)
+const attemptsLeft = ref(4)
+const isAccountDisabled = ref(false)
 
 const emailError = ref('')
 const otpError = ref('')
@@ -108,7 +110,10 @@ const sendOtp = async () => {
 }
 
 function startCountdown() {
-  countdown.value = 120
+  if (isAccountDisabled.value) {
+    return
+  }
+  countdown.value = 60
   clearInterval(timer)
   timer = setInterval(() => {
     countdown.value--
@@ -123,6 +128,10 @@ onUnmounted(() => {
 })
 
 const verifyOtp = async () => {
+  if (isAccountDisabled.value) {
+    return
+  }
+
   emailError.value = ''
   otpError.value = ''
 
@@ -146,11 +155,18 @@ const verifyOtp = async () => {
     if (response.status === 200) {
       localStorage.setItem('otp_verified', 'true')
       localStorage.setItem('verified_email', email.value)
-      router.push('/reset-password/new') 
+      router.push(`/reset-password/new/${payload.email}`) 
     }
-    // Simulate success
   } catch (err) {
     console.error(err)
+    attemptsLeft.value--
+    if (attemptsLeft.value <= 0) {
+      isAccountDisabled.value = true
+      clearInterval(timer)
+      otpError.value = 'Account disabled due to multiple failed attempts. Please contact admin for help.'
+    } else {
+      otpError.value = `Invalid OTP. ${attemptsLeft.value} attempts remaining.`
+    }
   } finally {
     verifyLoading.value = false
   }

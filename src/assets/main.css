@@ -1,8 +1,19 @@
 html {
   font-size: 85.5%; /* Default for larger screens */
 }
+
+.dark .input-group-text{
+ border: 1px solid #8a8787;;
+}
+
 .breadcrumb-item.active {
     color: #bcc4ca;
+}
+
+
+
+.form-select{
+  border: 1px solid #8a8787;
 }
 @media (max-width: 767px) {
   html {

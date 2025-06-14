@@ -2,22 +2,21 @@
   <aside :class="sidebarClasses">
     <div class="sidebar-header d-flex align-items-center justify-content-start">
       <router-link to="/app/dashboard" class="navbar-brand">
-        <!-- Logo -->
         <div class="logo-main">
           <div class="logo-normal">
             <svg class="icon-30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)" fill="currentColor" />
-              <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)" fill="currentColor" />
-              <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor" />
-              <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor" />
+              <rect x="-0.757" y="19.243" width="28" height="4" rx="2" transform="rotate(-45 -0.757 19.243)" fill="currentColor" />
+              <rect x="7.728" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.728 27.728)" fill="currentColor" />
+              <rect x="10.537" y="16.395" width="16" height="4" rx="2" transform="rotate(45 10.537 16.395)" fill="currentColor" />
+              <rect x="10.556" y="-0.556" width="28" height="4" rx="2" transform="rotate(45 10.556 -0.556)" fill="currentColor" />
             </svg>
           </div>
           <div class="logo-mini">
             <svg class="icon-30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)" fill="currentColor" />
-              <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)" fill="currentColor" />
-              <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor" />
-              <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor" />
+              <rect x="-0.757" y="19.243" width="28" height="4" rx="2" transform="rotate(-45 -0.757 19.243)" fill="currentColor" />
+              <rect x="7.728" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.728 27.728)" fill="currentColor" />
+              <rect x="10.537" y="16.395" width="16" height="4" rx="2" transform="rotate(45 10.537 16.395)" fill="currentColor" />
+              <rect x="10.556" y="-0.556" width="28" height="4" rx="2" transform="rotate(45 10.556 -0.556)" fill="currentColor" />
             </svg>
           </div>
         </div>
@@ -43,19 +42,10 @@
             </a>
           </li>
 
-          <!-- Dashboard -->
           <li class="nav-item" v-if="hasPermission('view-dashboard')">
             <router-link to="/app/dashboard" class="nav-link" :class="{ active: route.path === '/app/dashboard' }">
               <FontAwesomeIcon :icon="['fas', 'house']" />
               <span class="item-name">Dashboard</span>
-            </router-link>
-          </li>
-
-          <!-- Manage Users -->
-          <li class="nav-item" v-if="hasPermission('manage-users')">
-            <router-link to="/app/manage-users" class="nav-link" :class="{ active: route.path === '/app/manage-users' }">
-              <FontAwesomeIcon :icon="['fas', 'users']" />
-              <span class="item-name">Mange Users</span>
             </router-link>
           </li>
 
@@ -68,30 +58,43 @@
             </a>
           </li>
 
-          <!-- Special Pages (no permission check for now) -->
-          <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#sidebar-special" role="button" aria-expanded="false" aria-controls="sidebar-special">
-              <i class="icon">
-                <!-- SVG Icon omitted for brevity -->
-              </i>
-              <span class="item-name">Special Pages</span>
+          <li class="nav-item" v-if="hasPermission('view-users')">
+            <a
+              class="nav-link"
+              data-bs-toggle="collapse"
+              href="#sidebar-special"
+              role="button"
+              :aria-expanded="route.path.startsWith('/app/add-users')"
+              aria-controls="sidebar-special"
+              :class="{ collapsed: !route.path.startsWith('/app/add-users') }"
+            >
+              <FontAwesomeIcon :icon="['fas', 'users']" />
+              <span class="item-name">Manage Users</span>
               <i class="right-icon">
                 <svg class="icon-18" xmlns="http://www.w3.org/2000/svg" width="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                 </svg>
               </i>
             </a>
-            <ul class="sub-nav collapse" id="sidebar-special" data-bs-parent="#sidebar-menu">
+            <ul
+              class="sub-nav collapse"
+              id="sidebar-special"
+              data-bs-parent="#sidebar-menu"
+              ref="specialMenu"
+              :class="{ show: route.path.startsWith('/app/add-users') }"
+            >
               <li class="nav-item">
-                <a class="nav-link" href="../../dashboard/special-pages/billing.html">
+                <router-link class="nav-link" to="/app/add-users" :class="{ active: route.path === '/app/add-users' }">
                   <i class="icon">
                     <svg class="icon-10" xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
-                      <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                      <circle cx="12" cy="12" r="8" fill="currentColor" />
                     </svg>
                   </i>
-                  <i class="sidenav-mini-icon"> B </i>
-                  <span class="item-name">Billing</span>
-                </a>
+                  <i class="sidenav-mini-icon">
+                    <FontAwesomeIcon :icon="['fas', 'user-plus']" />
+                  </i>
+                  <span class="item-name">Add users</span>
+                </router-link>
               </li>
             </ul>
           </li>
@@ -104,46 +107,58 @@
     <div class="sidebar-footer"></div>
   </aside>
 </template>
+
 <script setup>
 import { useRoute } from 'vue-router';
-import { useAuthStore } from '@/stores/auth'
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { router } from '@/router/index.js'
+import { useAuthStore } from '@/stores/auth';
+import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-const auth = useAuthStore()
-const route = useRoute()
+// State
+const route = useRoute();
+const auth = useAuthStore();
+const isMobile = ref(false);
+const specialMenu = ref(null);
 
-const isMobile = ref(false)
-
+// Permission checker
 const hasPermission = (permission) => {
-  return auth.permissions?.includes(permission)
-}
+  return auth.permissions?.includes(permission);
+};
 
+// Responsive class checker
 const checkScreenSize = () => {
-  isMobile.value = window.innerWidth <= 768
-}
+  isMobile.value = window.innerWidth <= 768;
+};
 
+// Add/remove window event for resize
 onMounted(() => {
-  checkScreenSize()
-  window.addEventListener('resize', checkScreenSize)
-})
+  checkScreenSize();
+  window.addEventListener('resize', checkScreenSize);
+});
 
 onBeforeUnmount(() => {
-  window.removeEventListener('resize', checkScreenSize)
-})
+  window.removeEventListener('resize', checkScreenSize);
+});
 
-const sidebarClasses = computed(() => {
-  const baseClasses = [
-    'sidebar',
-    'sidebar-default',
-    'sidebar-white',
-    'sidebar-base',
-    'navs-rounded-all'
-  ]
-  if (isMobile.value) {
-    baseClasses.push('sidebar-mini')
+// Collapse dropdown when route changes
+watch(route, async () => {
+  await nextTick();
+
+  if (specialMenu.value?.classList.contains('show') && !route.path.startsWith('/app/add-users')) {
+    specialMenu.value.classList.remove('show');
+
+    // Optional Bootstrap collapse API
+    if (window.bootstrap?.Collapse) {
+      const instance = window.bootstrap.Collapse.getInstance(specialMenu.value);
+      if (instance) instance.hide();
+    }
   }
-  return baseClasses
-})
+});
+
+// Sidebar dynamic classes
+const sidebarClasses = computed(() => {
+  const baseClasses = ['sidebar', 'sidebar-default', 'sidebar-white', 'sidebar-base', 'navs-rounded-all'];
+  if (isMobile.value) baseClasses.push('sidebar-mini');
+  return baseClasses;
+});
 </script>

@@ -147,16 +147,18 @@ const logout = async () => {
 
   if (result.isConfirmed) {
     localStorage.removeItem('token')
+    auth.$reset() // Reset auth store state
 
-    await Swal.fire({
-      title: 'Logged out!',
-      text: 'You have been logged out successfully.',
-      icon: 'success',
-      confirmButtonText: 'OK',
-    })
+    if (router.currentRoute.value.path !== '/') {
+      router.push('/')
+    } else {
 
-    router.push('/')
+      router.replace({ path: '/login' }).then(() => {
+        router.replace('/')
+      })
+    }
   }
+
 }
 
 

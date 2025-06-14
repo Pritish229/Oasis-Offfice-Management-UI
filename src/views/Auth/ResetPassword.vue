@@ -1,228 +1,193 @@
 <template>
   <div class="container">
-    <div class="card">
-      <h2>Reset Your Password</h2>
+    <div>
+      <form @submit.prevent="sendOtp" v-if="!isvalidotp">
+        <h4 style="color:#007bff; display:flex; justify-content:center; margin:10px;">
+          Reset password
+        </h4>
+        <label for="email">Email</label>
+        <input type="email" id="email" v-model="email" placeholder="Enter your email" required />
+        <p v-if="emailError" class="error-msg">{{ emailError }}</p>
 
-      <form @submit.prevent="showOtpInput ? handleVerifyOtp() : handleLogin">
-        <!-- Email input -->
-        <div v-if="!showOtpInput">
-          <label for="identifier" style="width:100%;">Email</label>
-          <input type="text" id="identifier" v-model="identifier" placeholder="Enter your email"  style="width:100%;"/>
-          <span v-if="identifierError" class="error">{{ identifierError }}</span>
-        </div>
-
-        <!-- OTP input -->
-        <div v-else>
-          <label for="otp">Enter OTP</label>
-          <input
-            type="text"
-            id="otp"
-            v-model="otp"
-            placeholder="Enter 6-digit OTP"
-            :disabled="isLocked"
-          />
-          <span v-if="otpError" class="error">{{ otpError }}</span>
-          <div
-            v-if="isLocked"
-            style="color: red; font-size: 13px; margin-top: 5px;"
-          >
-            Too many attempts. Try again in
-            {{ Math.floor(countdown / 60) }}:{{ String(countdown % 60).padStart(2, '0') }}
-          </div>
-        </div>
-
-        <button type="submit" :disabled="loading || isLocked">
-          {{ loading ? 'Sending OTP...' : showOtpInput ? 'Verify OTP' : 'Send OTP' }}
+        <button type="submit" :disabled="sendLoading">
+          {{ sendLoading ? 'Sending...' : 'Send OTP' }}
         </button>
+
+        <div class="switch">
+          <router-link to="/login">Back to Login</router-link>
+        </div>
       </form>
 
-      <div class="switch" style="display: flex; justify-content: center;">
-        <router-link to="/login">Back to Login</router-link>
-      </div>
+      <form @submit.prevent="verifyOtp" v-else>
+        <h4 style="color:#007bff; display:flex; justify-content:center; margin:10px;">
+          Reset password
+        </h4>
+        <label for="email">Email</label>
+        <input type="email" id="email" v-model="email" placeholder="Enter your email" disabled />
+        <p v-if="emailError" class="error-msg">{{ emailError }}</p>
+
+        <label for="otp">OTP</label>
+        <div style="position: relative;">
+          <input type="text" id="otp" v-model="otp" placeholder="Enter OTP" :disabled="isAccountDisabled" />
+          <div class="countdown" v-if="countdown > 0 && !isAccountDisabled">
+            {{ formattedTime }}
+          </div>
+        </div>
+        <p v-if="otpError" class="error-msg">{{ otpError }}</p>
+
+        <button type="submit" :disabled="verifyLoading || isAccountDisabled">
+          {{ verifyLoading ? 'Verifying...' : 'Verify OTP' }}
+        </button>
+
+        <div v-if="countdown <= 0 && !isAccountDisabled" class="resend-container">
+          <a href="javascript:void(0)" class="resend-link" @click="!sendLoading && sendOtp()">
+            {{ sendLoading ? 'Sending...' : 'Resend OTP' }}
+          </a>
+        </div>
+
+        <div class="switch">
+          <router-link to="/login">Back to Login</router-link>
+        </div>
+      </form>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onUnmounted } from 'vue'
+import axios from 'axios'
+import { API_URL } from '@/config/path.js'
+import { useRouter } from 'vue-router'
 
-const identifier = ref('')
-const identifierError = ref('')
+const router = useRouter()
+const email = ref('')
 const otp = ref('')
+const sendLoading = ref(false)
+const verifyLoading = ref(false)
+const isvalidotp = ref(false)
+const attemptsLeft = ref(4)
+const isAccountDisabled = ref(false)
+
+const emailError = ref('')
 const otpError = ref('')
-const loading = ref(false)
-const showOtpInput = ref(false)
-const attemptCount = ref(0)
-const isLocked = ref(false)
+
 const countdown = ref(0)
 let timer = null
 
-const LOCK_DURATION = 600 // 10 minutes
+const formattedTime = computed(() => {
+  const minutes = Math.floor(countdown.value / 60).toString().padStart(2, '0')
+  const seconds = (countdown.value % 60).toString().padStart(2, '0')
+  return `${minutes}:${seconds}`
+})
 
-function validateEmail(email) {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  return re.test(email)
+function isValidEmail(email) {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return regex.test(email)
 }
 
-function handleLogin() {
-  identifierError.value = ''
-  if (!validateEmail(identifier.value)) {
-    identifierError.value = 'Invalid email address'
+const sendOtp = async () => {
+  emailError.value = ''
+  if (!isValidEmail(email.value)) {
+    emailError.value = 'Please enter a valid email address.'
     return
   }
 
-  loading.value = true
-  setTimeout(() => {
-    loading.value = false
-    showOtpInput.value = true
-    localStorage.setItem('email', identifier.value)
-    console.log('OTP sent to:', identifier.value)
-  }, 1000)
-}
+  sendLoading.value = true
 
-function handleVerifyOtp() {
-  otpError.value = ''
-  if (isLocked.value) return
+  try {
+    const response = await axios.post(`${API_URL}/password/forgot-password`, { email: email.value })
 
-  if (otp.value !== '123456') {
-    attemptCount.value++
-    otpError.value = 'Incorrect OTP'
-    localStorage.setItem('attemptCount', attemptCount.value)
-
-    if (attemptCount.value >= 3) {
-      lockOtpInput()
+    if (response.status === 200) {
+      isvalidotp.value = true
+      startCountdown()
     }
-  } else {
-    alert('OTP verified successfully!')
-    resetAll()
+    alert(response.data.message || 'OTP sent!')
+  } catch (error) {
+    console.log(error)
+  } finally {
+    sendLoading.value = false
   }
 }
 
-function lockOtpInput() {
-  isLocked.value = true
-  const lockStartTime = Date.now()
-  localStorage.setItem('lockStartTime', lockStartTime.toString())
-  localStorage.setItem('attemptCount', attemptCount.value)
-  countdown.value = LOCK_DURATION
-  startCountdown()
-}
-
 function startCountdown() {
-  if (timer) clearInterval(timer)
+  if (isAccountDisabled.value) {
+    return
+  }
+  countdown.value = 60
+  clearInterval(timer)
   timer = setInterval(() => {
     countdown.value--
     if (countdown.value <= 0) {
-      isLocked.value = false
-      attemptCount.value = 0
-      localStorage.removeItem('lockStartTime')
-      localStorage.removeItem('attemptCount')
       clearInterval(timer)
     }
   }, 1000)
 }
 
-function resumeLockIfNeeded() {
-  const lockStart = parseInt(localStorage.getItem('lockStartTime') || '0')
-  const prevAttempts = parseInt(localStorage.getItem('attemptCount') || '0')
-
-  if (lockStart && prevAttempts >= 3) {
-    const elapsed = Math.floor((Date.now() - lockStart) / 1000)
-    if (elapsed < LOCK_DURATION) {
-      countdown.value = LOCK_DURATION - elapsed
-      isLocked.value = true
-      attemptCount.value = prevAttempts
-      showOtpInput.value = true
-      startCountdown()
-    } else {
-      localStorage.removeItem('lockStartTime')
-      localStorage.removeItem('attemptCount')
-    }
-  }
-
-  const savedEmail = localStorage.getItem('email')
-  if (savedEmail) {
-    identifier.value = savedEmail
-    showOtpInput.value = true
-  }
-}
-
-function resetAll() {
-  identifier.value = ''
-  otp.value = ''
-  identifierError.value = ''
-  otpError.value = ''
-  attemptCount.value = 0
-  isLocked.value = false
-  showOtpInput.value = false
-  localStorage.clear()
+onUnmounted(() => {
   clearInterval(timer)
+})
+
+const verifyOtp = async () => {
+  if (isAccountDisabled.value) {
+    return
+  }
+
+  emailError.value = ''
+  otpError.value = ''
+
+  if (!isValidEmail(email.value)) {
+    emailError.value = 'Please enter a valid email address.'
+  }
+
+  if (!otp.value || otp.value.length !== 6 || !/^\d{6}$/.test(otp.value)) {
+    otpError.value = 'OTP must be a 6-digit number.'
+  }
+
+  if (emailError.value || otpError.value) return
+
+  verifyLoading.value = true
+  try {
+    const payload = {
+      email: email.value,
+      otp: otp.value
+    }
+    const response = await axios.post(`${API_URL}/password/verify-reset-otp`, payload)
+    if (response.status === 200) {
+      localStorage.setItem('otp_verified', 'true')
+      localStorage.setItem('verified_email', email.value)
+      router.push(`/reset-password/new/${payload.email}`) 
+    }
+  } catch (err) {
+    console.error(err)
+    attemptsLeft.value--
+    if (attemptsLeft.value <= 0) {
+      isAccountDisabled.value = true
+      clearInterval(timer)
+      otpError.value = 'Account disabled due to multiple failed attempts. Please contact admin for help.'
+    } else {
+      otpError.value = `Invalid OTP. ${attemptsLeft.value} attempts remaining.`
+    }
+  } finally {
+    verifyLoading.value = false
+  }
 }
 
-onMounted(() => {
-  resumeLockIfNeeded()
-})
-
-onBeforeUnmount(() => {
-  if (timer) clearInterval(timer)
-})
 </script>
 
 <style scoped>
 .container {
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-}
-
-.card {
-  width: 400px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
-
-h2 {
-  color: #007BFF;
-  margin-bottom: 20px;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-}
-
-label {
-  text-align: left;
-  margin-bottom: 5px;
-}
-
-input {
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-}
-
-button {
-  padding: 10px;
-  background-color: #007BFF;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:disabled {
-  background-color: #6c757d;
-  cursor: not-allowed;
+  background: #f5f7fa;
 }
 
 .switch {
   margin-top: 15px;
   font-size: 14px;
+  display: flex;
+  justify-content: center;
 }
 
 .switch a {
@@ -230,11 +195,90 @@ button:disabled {
   text-decoration: none;
 }
 
-.error {
+.resend-link {
+  margin-top: 10px;
+  color: #dc3545;
+  font-weight: bold;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  text-align: center;
+}
+.resend-link:disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+form {
+  width: 100%;
+  min-width: 450px;
+  padding: 30px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 19px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+}
+
+.countdown {
+  position: absolute;
+  top: 15px;
+  bottom: 5px;
+  left: 90%;
   color: red;
-  font-size: 12px;
-  text-align: left;
-  margin-top: -5px;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.resend-container {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.resend-btn {
+  margin-top: 10px;
+  background: none;
+  border: none;
+  color: #dc3545;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.error-msg {
+  color: red;
+  font-size: 13px;
   margin-bottom: 10px;
 }
 </style>

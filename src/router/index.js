@@ -12,6 +12,18 @@ const routes = [
     component: () => import('@/views/Auth/Login.vue')
   },
   {
+    path: '/reset-password/new/:useremail',
+    component: () => import('@/views/Auth/SetNewPassword.vue'),
+    beforeEnter: (to, from, next) => {
+      const verified = localStorage.getItem('otp_verified') === 'true'
+      if (verified) {
+        next()
+      } else {
+        next('/reset-password') 
+      }
+    }
+  },
+  {
     path: '/Reset-Password',
     name: 'Reset-password',
     component: () => import('@/views/Auth/ResetPassword.vue')

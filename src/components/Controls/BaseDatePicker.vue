@@ -1,6 +1,5 @@
-<!-- components/Controls/BaseDatePicker.vue -->
 <template>
-  <div class="mb-3">
+  <div class="mb-3 position-relative">
     <Field :name="name" v-slot="{ field, errorMessage, meta }">
       <label :for="name" class="form-label">
         {{ label }}
@@ -18,12 +17,19 @@
         :auto-apply="true"
         :hide-input-icon="true"
         :from-input="true"
-        :input-class="[
-          'form-control',
-          meta.touched && errorMessage ? 'is-invalid' : '',
-          meta.touched && !errorMessage ? 'is-valid' : ''
-        ]"
+        :state="(meta.touched || meta.validated) ? !errorMessage : null"
+        input-class="form-control pe-5"
       />
+
+      <!-- Error icon -->
+      <span
+        v-if="(meta.touched || meta.validated) && errorMessage"
+        class="position-absolute validation-icon"
+      >
+        <div class="validation-icon-outline">
+          <font-awesome-icon icon="exclamation" />
+        </div>
+      </span>
 
       <div v-if="meta.touched && errorMessage" class="invalid-feedback">
         {{ errorMessage }}
@@ -44,3 +50,35 @@ defineProps({
   is_required: Boolean
 })
 </script>
+
+<style scoped>
+.dark .dp__input {
+  background: transparent;
+}
+
+.dp__input_invalid {
+  box-shadow: none !important;
+  border-color: #c03221 !important;
+}
+
+.validation-icon {
+  top: 50%;
+  right: 0.5rem;
+  transform: translateY(30%);
+  position: absolute;
+  pointer-events: none;
+}
+
+.validation-icon-outline {
+  width: 15px;
+  height: 15px;
+  border: 1.9px solid #c03221;
+  border-radius: 50%;
+  color: #c03221;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  background-color: transparent;
+}
+</style>

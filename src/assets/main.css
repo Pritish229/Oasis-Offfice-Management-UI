@@ -2,18 +2,58 @@ html {
   font-size: 85.5%; /* Default for larger screens */
 }
 
-.dark .input-group-text{
- border: 1px solid #8a8787;;
+.dark .input-group-text {
+  border: 1px solid #8a8787;
 }
 
 .breadcrumb-item.active {
-    color: #bcc4ca;
+  color: #bcc4ca;
 }
 
+.dp__input {
+  border: 1px solid #cacaca !important;
+  padding: 0.5rem 1rem !important;
+  color: #8a92a6 !important;
+}
 
+.dark .dp__input {
+  background: transparent;
+  border: 1px solid #8a8787 !important;
+}
 
-.form-select{
-  border: 1px solid #8a8787;
+.dp__input_invalid {
+  box-shadow: none !important;
+  border-color: #c03221 !important;
+}
+
+.dark .dp__input_invalid {
+  box-shadow: none !important;
+  border-color: #c03221 !important;
+}
+.dp__input_valid {
+  box-shadow: none !important;
+  border-color: #1aa053 !important;
+}
+.dark .dp__input_valid {
+  box-shadow: none !important;
+  border-color: #1aa053 !important;
+}
+
+.form-select {
+  border: 1px solid #cacaca;
+  border-radius: 5px !important;
+}
+
+.dark .form-select {
+  border: 1px solid #8a8787 !important;
+}
+.dark .was-validated .form-select:valid,
+.form-select.is-valid {
+  border-color: #1aa053 !important;
+}
+
+.dark .input-group-text {
+  border: 1px solid #8a92a6 !important;
 }
 @media (max-width: 767px) {
   html {

@@ -39,17 +39,7 @@
           </svg>
         </i>
       </div>
-      <div class="input-group search-input">
-        <span class="input-group-text" id="search-input">
-          <svg class="icon-18" width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5"
-              stroke-linecap="round" stroke-linejoin="round"></circle>
-            <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
-              stroke-linejoin="round"></path>
-          </svg>
-        </span>
-        <input type="search" class="form-control" placeholder="Search...">
-      </div>
+      <SearchDropdown />
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon">
@@ -107,6 +97,8 @@ import Swal from 'sweetalert2'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { onMounted,ref,reactive } from 'vue'
+import SearchDropdown  from '@/components/Controls/SearchDropdown.vue'
+
 
 const auth = useAuthStore()
 const rolesName = ref([]);
@@ -164,3 +156,9 @@ const logout = async () => {
 
 
 </script>
+
+<style scoped>
+.dark .input-group-text{
+  border-color:#30384f ;
+}
+</style>

@@ -1,7 +1,10 @@
+// router/index.js
+
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
-const routes = [
+// ✅ Export routes separately
+export const routes = [
   {
     path: '/',
     redirect: '/login'
@@ -52,8 +55,6 @@ const routes = [
           ]
         }
       },
-
-      // ✅ Group under /app/users
       {
         path: 'users',
         meta: { requiresAuth: true },
@@ -89,7 +90,6 @@ const routes = [
       }
     ]
   }
-
 ]
 
 const router = createRouter({
@@ -128,6 +128,5 @@ router.beforeEach(async (to, from, next) => {
   next()
 })
 
-// ✅ Export both default and named for flexibility
 export { router }
 export default router

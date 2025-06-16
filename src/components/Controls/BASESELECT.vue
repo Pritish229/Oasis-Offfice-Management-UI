@@ -28,11 +28,7 @@ const props = defineProps({
 </template>
 
 <style scoped>
-.is-invalid {
-  border-color: #dc3545;
-}
-
-.is-valid {
-  border-color: #1aa053;
+.dark .form-select.is-invalid {
+    border-color: #c03221 !important;
 }
 </style>

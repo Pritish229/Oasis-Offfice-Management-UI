@@ -6,9 +6,9 @@
         :class="{ completed: index < currentStep, active: index === currentStep }">
         <div class="rounded-circle d-flex align-items-center justify-content-center mb-2" :class="[
           'border border-primary',
-          index < currentStep ? 'bg-success text-white border-success'
-            : index === currentStep ? 'bg-primary text-white border-primary'
-              : 'bg-light text-secondary border-secondary'
+          index < currentStep ? 'bg-success text-white border-success' :
+            index === currentStep ? 'bg-primary text-white border-primary' :
+              'bg-light text-secondary border-secondary'
         ]" style="width: 40px; height: 40px;">
           <font-awesome-icon v-if="index < currentStep" icon="check" />
           <span v-else class="text-ico">{{ index + 1 }}</span>
@@ -17,7 +17,6 @@
       </div>
     </div>
 
-    <!-- Form -->
     <Form :validation-schema="schemas[currentStep]" :initial-values="formValues" @submit="handleSubmit"
       v-slot="{ validate, values }">
       <div v-if="currentStep === 0">
@@ -26,22 +25,11 @@
             <h4>Personal Details</h4>
             <BaseInput name="fullName" label="Full Name" :is_required="true" placeholder="Enter Fullname" />
             <BaseSelect name="gender" label="Gender" :options="genderOptions" :is_required="true" />
-
-            <!-- Flatpickr with modelValue -->
-            <Field name="dob" v-slot="{ field, errors, meta }">
-              <label class="form-label">Date of Birth <small class="text-danger">*</small></label>
-              <flat-pickr v-model="field.value" :config="{ dateFormat: 'Y-m-d', allowInput: true }"
-                class="form-control mb-3"
-                :class="{ 'is-invalid': errors.length, 'is-valid': meta.valid && meta.touched }"
-                placeholder="Select Date of Birth"
-                @change="date => field.value = date && date[0] ? date[0].toISOString().slice(0, 10) : ''" />
-              <div v-if="errors.length" class="invalid-feedback">{{ errors[0] }}</div>
-            </Field>
+            <BaseDatePicker name="dob" placeholder="Select your date of birth" label="Date of Birth" />
 
             <BaseSelect name="maritalStatus" label="Marital Status" :options="maritalOptions" :is_required="true" />
             <BaseInput name="aadharNo" label="Aadhar Number" :is_required="true" placeholder="Enter Aadhaar Number" />
           </div>
-
           <div class="col-lg-6">
             <h4>Address Information</h4>
             <BaseInput name="contactNo" label="Contact Number" :is_required="true" placeholder="Enter Contact No" />
@@ -80,19 +68,16 @@
 
 <script setup>
 import { ref } from 'vue'
-import { Form, Field } from 'vee-validate'
+import { Form } from 'vee-validate'
 import * as yup from 'yup'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import { API_URL } from '@/config/path.js'
-
-import FlatPickr from 'vue-flatpickr-component'
-import 'flatpickr/dist/flatpickr.css'
-
 import BaseInput from '@/components/Controls/BASEINPUT.vue'
 import BaseSelect from '@/components/Controls/BASESELECT.vue'
 import BaseTextArea from '@/components/Controls/BASETEXTAREA.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import BaseDatePicker from '@/components/Controls/BaseDatePicker.vue'
 
 const currentStep = ref(0)
 const isSendingOtp = ref(false)
@@ -136,35 +121,15 @@ const schemas = [
   yup.object({
     fullName: yup.string().required('Full name is required'),
     gender: yup.string().required('Gender is required'),
-    dob: yup
-      .date()
-      .transform((value, originalValue) => {
-        if (typeof originalValue === 'string' && originalValue !== '') {
-          const parsed = new Date(originalValue)
-          return isNaN(parsed) ? null : parsed
-        }
-        return value
-      })
-      .required('Date of birth is required'),
+    dob: yup.date().required('Date of birth is required'),
     maritalStatus: yup.string().required('Marital status is required'),
-    aadharNo: yup
-      .string()
-      .required('Aadhar number is required')
-      .matches(/^\d{12}$/, 'Aadhar must be 12 digits'),
-    contactNo: yup
-      .string()
-      .required('Contact number is required')
-      .matches(/^\d{10}$/, 'Must be 10 digits'),
-    altNo: yup
-      .string()
-      .nullable()
-      .transform((v) => (v === '' ? null : v))
-      .matches(/^\d{10}$/, {
-        message: 'Alternate must be 10 digits',
-        excludeEmptyString: true,
-      }),
+    aadharNo: yup.string().required('Aadhar number is required').matches(aadharRegex, 'Aadhar must be 12 digits'),
+    contactNo: yup.string().required('Contact number is required').matches(phoneRegex, 'Must be 10 digits'),
+    altNo: yup.string().nullable().transform(v => (v === '' ? null : v)).matches(phoneRegex, {
+      message: 'Alternate must be 10 digits', excludeEmptyString: true
+    }),
     presentAddress: yup.string().required('Present address is required'),
-    permanentAddress: yup.string().nullable(),
+    permanentAddress: yup.string().nullable()
   }),
   yup.object({
     username: yup.string().required('Username is required'),
@@ -246,6 +211,7 @@ const handleSubmit = async (values) => {
   flex: 1;
   text-align: center;
 }
+
 
 .step-item.active .text-ico {
   color: #ffffff;

@@ -19,7 +19,7 @@ const routes = [
       if (verified) {
         next()
       } else {
-        next('/reset-password') 
+        next('/reset-password')
       }
     }
   },
@@ -52,37 +52,44 @@ const routes = [
           ]
         }
       },
+
+      // ✅ Group under /app/users
       {
-        path: 'manage-users',
-        name: 'ManageUsers',
-        component: () => import('@/views/Dashboard/MangeUsers/UserList.vue'),
-        meta: {
-          requiresAuth: true,
-          permissions: ['manage-users'],
-          title: 'Manage Users',
-          breadcrumb: [
-            { label: 'Home', to: '/app/dashboard' },
-            { label: 'Manage Users', to: '/app/manage-users' }
-          ]
-        }
-      },
-      {
-        path: 'add-users',
-        name: 'addUsers',
-        component: () => import('@/views/Dashboard/MangeUsers/Addusers.vue'),
-        meta: {
-          requiresAuth: true,
-          permissions: ['create-users'],
-          title: 'Manage Users',
-          breadcrumb: [
-            { label: 'Home', to: '/app/dashboard' },
-            { label: 'Manage Users', to: '/app/manage-users' },
-            { label: 'Add Users', to: '/app/add-users' }
-          ]
-        }
+        path: 'users',
+        meta: { requiresAuth: true },
+        children: [
+          {
+            path: 'manage',
+            name: 'ManageUsers',
+            component: () => import('@/views/Dashboard/MangeUsers/UserList.vue'),
+            meta: {
+              permissions: ['manage-users'],
+              title: 'Manage Users',
+              breadcrumb: [
+                { label: 'Home', to: '/app/dashboard' },
+                { label: 'Manage Users', to: '/app/users/manage' }
+              ]
+            }
+          },
+          {
+            path: 'add',
+            name: 'AddUsers',
+            component: () => import('@/views/Dashboard/MangeUsers/Addusers.vue'),
+            meta: {
+              permissions: ['create-users'],
+              title: 'Add Users',
+              breadcrumb: [
+                { label: 'Home', to: '/app/dashboard' },
+                { label: 'Manage Users', to: '/app/users/manage' },
+                { label: 'Add Users', to: '/app/users/add' }
+              ]
+            }
+          }
+        ]
       }
     ]
   }
+
 ]
 
 const router = createRouter({

@@ -8,6 +8,9 @@
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
     import { fas } from '@fortawesome/free-solid-svg-icons'
     import { useAuthStore } from '@/stores/auth'
+    import VueDatePicker from '@vuepic/vue-datepicker';
+    import '@vuepic/vue-datepicker/dist/main.css'
+
 
     library.add(fas)
 
@@ -18,6 +21,7 @@
     app.use(router)
 
     app.component('FontAwesomeIcon', FontAwesomeIcon)
+    app.component('VueDatePicker', VueDatePicker);
 
     const auth = useAuthStore()
     auth.initialize?.() // optional: if you have an initialize() action

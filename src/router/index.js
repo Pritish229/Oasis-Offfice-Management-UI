@@ -65,6 +65,21 @@ const routes = [
             { label: 'Manage Users', to: '/app/manage-users' }
           ]
         }
+      },
+      {
+        path: 'add-users',
+        name: 'addUsers',
+        component: () => import('@/views/Dashboard/MangeUsers/Addusers.vue'),
+        meta: {
+          requiresAuth: true,
+          permissions: ['create-users'],
+          title: 'Manage Users',
+          breadcrumb: [
+            { label: 'Home', to: '/app/dashboard' },
+            { label: 'Manage Users', to: '/app/manage-users' },
+            { label: 'Add Users', to: '/app/add-users' }
+          ]
+        }
       }
     ]
   }

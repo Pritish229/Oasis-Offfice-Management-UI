@@ -3,14 +3,17 @@
     <div class="card">
       <h2>Login</h2>
       <form @submit.prevent="handleLogin">
-        <label for="identifier">Email or Username</label>
-        <input type="text" id="identifier" v-model="identifier" placeholder="Enter your email or username" />
-        <span v-if="identifierError" class="error">{{ identifierError }}</span>
+        <div style="margin-bottom: 10px;">
+          <label for="identifier">Email or Username</label>
+          <input type="text" id="identifier" v-model="identifier" placeholder="Enter your email or username" />
+          <span v-if="identifierError" class="error">{{ identifierError }}</span>
+        </div>
 
         <div class="password-field">
           <label for="password">Password</label>
           <div class="input-group">
-            <input :type="showPassword ? 'text' : 'password'" id="password" v-model="password" placeholder="Enter your password" />
+            <input :type="showPassword ? 'text' : 'password'" id="password" v-model="password"
+              placeholder="Enter your password" />
             <button type="button" class="toggle-password" @click="showPassword = !showPassword">
               <FontAwesomeIcon :icon="showPassword ? ['fas', 'eye-slash'] : ['fas', 'eye']" />
             </button>
@@ -125,6 +128,10 @@ label {
   margin-bottom: 15px;
 }
 
+.password-field input {
+  border-radius: 5px !important;
+}
+
 .input-group {
   position: relative;
   display: flex;
@@ -137,6 +144,7 @@ input {
   border: 1px solid #ddd;
   border-radius: 5px;
   font-size: 14px;
+  margin-bottom: 1px;
 }
 
 .toggle-password {

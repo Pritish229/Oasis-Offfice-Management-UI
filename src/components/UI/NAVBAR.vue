@@ -39,7 +39,10 @@
           </svg>
         </i>
       </div>
-      <SearchDropdown />
+      <div class="input-group nav-search">
+
+        <SearchDropdown />
+      </div>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon">
@@ -96,8 +99,22 @@
 import Swal from 'sweetalert2'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { onMounted,ref,reactive } from 'vue'
+import { onMounted,ref,reactive,onBeforeUnmount } from 'vue'
 import SearchDropdown  from '@/components/Controls/SearchDropdown.vue'
+
+const isSmallScreen = ref(window.innerWidth < 576)
+
+const handleResize = () => {
+  isSmallScreen.value = window.innerWidth < 576
+}
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize)
+})
 
 
 const auth = useAuthStore()

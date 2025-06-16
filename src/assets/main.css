@@ -59,4 +59,8 @@ html {
   html {
     font-size: 100%; /* 16px on phone screens */
   }
+
+  .nav-search{
+    display: none !important;
+  }
 }

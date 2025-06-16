@@ -22,7 +22,7 @@
         </div>
         <h5 class="logo-title">BUBBLE OASIS</h5>
       </router-link>
-      <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
+      <div class="sidebar-toggle" data-toggle="sidebar" >
         <i class="icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
             <path d="M4.25 12.2744L19.25 12.2744" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />

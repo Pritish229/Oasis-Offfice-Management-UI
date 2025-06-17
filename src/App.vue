@@ -1,13 +1,9 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import APPLayout from './components/LAYOUT/APPLayout.vue';
+import { onMounted } from 'vue'
 
 
 </script>
 
 <template>
-
-  <APPLayout />
-
-  <RouterView />
+   <RouterView />
 </template>

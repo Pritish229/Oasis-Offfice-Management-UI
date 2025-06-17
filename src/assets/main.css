@@ -59,6 +59,19 @@ html {
 .dark .bh-mr-2 {
     color: white !important;
 }
+
+.dark thead, .dark tbody, .dark tfoot, .dark tr, .dark td, .dark th td{
+  color: white;
+}
+
+.bh-table-responsive table.bh-table-hover tbody tr:hover td{
+  color: black;
+}
+
+.bh-table-responsive table.bh-table-hover tbody tr:hover{
+  background-color: #8a8787;
+}
+
 @media (max-width: 767px) {
   html {
     font-size: 100%; /* 16px on phone screens */

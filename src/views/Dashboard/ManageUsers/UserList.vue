@@ -1,37 +1,69 @@
 <template>
     <div class="card p-4">
-        <!-- Search Input -->
-        <div class="row  pt-3">
+        <!-- Search and Add Button -->
+        <div class="row pt-3">
             <span class="col-lg-4 mb-3">
                 <router-link to="/app/users/add">
                     <button class="btn btn-primary">
-                        <FontAwesomeIcon :icon="['fas', 'fa-circle-plus']" class="me-2" /> Add New
-                    </button></router-link>
+                        <FontAwesomeIcon :icon="['fas', 'fa-circle-plus']" class="me-2" />
+                        Add New
+                    </button>
+                </router-link>
             </span>
+
             <span class="col-lg-8">
                 <div class="d-flex justify-content-end mb-2">
                     <div class="input-group" style="max-width: 350px">
                         <input class="form-control" type="text" v-model="params.search"
-                            placeholder="Search Something.." @input="debouncedSearch" />
-                      
+                            placeholder="Search Something..." @input="debouncedSearch" />
                     </div>
                 </div>
             </span>
         </div>
 
         <!-- Data Table -->
-        <vue3-datatable :rows="rows" :columns="cols" :loading="loading" :sortable="true" :totalRows="total_rows"
-            :isServerMode="true" :pageSize="params.pagesize" :sortColumn="params.sort_column"
-            :sortDirection="params.sort_direction" @change="changeServer" />
+        <vue3-datatable
+            :rows="rows"
+            :columns="cols"
+            :loading="loading"
+            :sortable="true"
+            :totalRows="total_rows"
+            :isServerMode="true"
+            :pageSize="params.pagesize"
+            :sortColumn="params.sort_column"
+            :sortDirection="params.sort_direction"
+            skin="bh-table-hover"
+            @change="changeServer"
+        >
+            <!-- Status Column -->
+            <template #item-status="{ row }">
+                <span :class="['badge', row.status === '1' ? 'bg-success' : 'bg-secondary']">
+                    {{ row.status === '1' ? 'Active' : 'Inactive' }}
+                </span>
+            </template>
+
+            <!-- Actions Column -->
+            <template #actions="{ row }">
+                <div class="d-flex justify-content-start gap-3">
+                    <router-link :to="`/app`" title="View">
+                        <FontAwesomeIcon :icon="['fas', 'fa-eye']" class="text-success"/>
+                    </router-link>
+                    <router-link :to="`/app`" title="Edit">
+                        <FontAwesomeIcon :icon="['fas', 'fa-pen-to-square']" />
+                    </router-link>
+                </div>
+            </template>
+        </vue3-datatable>
     </div>
 </template>
+
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
 import Vue3Datatable from '@bhplugin/vue3-datatable';
 import '@bhplugin/vue3-datatable/dist/style.css';
 import axios from 'axios';
 import { API_URL } from '@/config/path.js';
-
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const loading = ref(true);
 const rows = ref([]);
@@ -51,9 +83,10 @@ const cols = ref([
     { field: 'fullName', title: 'Full Name', sortable: true },
     { field: 'email', title: 'Email', sortable: true },
     { field: 'contactNo', title: 'Contact Number', sortable: true },
+    { field: 'status', title: 'Status', sortable: true },
+    { field: 'actions', title: 'Actions', sortable: false },
 ]);
 
-// Fetch data from server
 const getUsers = async () => {
     loading.value = true;
     try {
@@ -80,7 +113,6 @@ const getUsers = async () => {
     }
 };
 
-// Handle datatable changes (pagination, sort)
 const changeServer = (data) => {
     params.current_page = data.current_page;
     params.pagesize = data.pagesize;
@@ -89,12 +121,11 @@ const changeServer = (data) => {
     getUsers();
 };
 
-// Debounced search (300ms)
 let searchTimer = null;
 const debouncedSearch = () => {
     clearTimeout(searchTimer);
     searchTimer = setTimeout(() => {
-        params.current_page = 1; // Reset to page 1 on new search
+        params.current_page = 1;
         getUsers();
     }, 300);
 };
@@ -102,11 +133,7 @@ const debouncedSearch = () => {
 onMounted(() => {
     getUsers();
 });
-
-
-
 </script>
-
 
 <style scoped>
 th.sortable {
@@ -116,9 +143,7 @@ th.sortable {
 
 th.sortable::after {
     font-family: "Font Awesome 5 Free";
-    /* Use the Font Awesome font family */
     font-weight: 900;
-    /* Set the font weight for solid icons */
     content: "\f0dc";
     position: absolute;
     right: 8px;
@@ -127,45 +152,19 @@ th.sortable::after {
 
 th.sortable.asc::after {
     content: "\f0d8";
-    /* Upward pointing arrow for ascending order */
 }
 
 th.sortable.desc::after {
     content: "\f0d7";
-    /* Downward pointing arrow for descending order */
 }
 
 th.sortable:hover::after {
     color: #5266ec;
 }
 
-.responsive-text {
-    white-space: nowrap;
-    /* Prevent text from wrapping to the next line */
-    overflow: hidden;
-    /* Hide overflowing content */
-    text-overflow: ellipsis;
-    /* Display an ellipsis for overflowed text */
-    max-width: 150px;
-}
-
-.scroll {
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.action-column {
-    position: relative;
-    /* Set position to relative */
-}
-
 .icon-hv {
     font-size: 20px;
     transition: font-size 0.3s ease;
-    /* Smooth transition animation */
-
-    transform: translate(-50%, -50%);
-    /* Center the icon */
 }
 
 .icon-hv:hover {

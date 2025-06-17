@@ -98,6 +98,11 @@ const router = createRouter({
   routes
 })
 
+router.afterEach((to) => {
+  const defaultTitle = 'My App' // Change this to your app's default title
+  document.title = to.meta.title || defaultTitle
+})
+
 router.beforeEach(async (to, from, next) => {
   const auth = useAuthStore()
   const token = localStorage.getItem('token')

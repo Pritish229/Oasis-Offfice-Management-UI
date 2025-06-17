@@ -136,38 +136,5 @@ onMounted(() => {
 </script>
 
 <style scoped>
-th.sortable {
-    position: relative;
-    cursor: pointer;
-}
 
-th.sortable::after {
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    content: "\f0dc";
-    position: absolute;
-    right: 8px;
-    color: #5266ec;
-}
-
-th.sortable.asc::after {
-    content: "\f0d8";
-}
-
-th.sortable.desc::after {
-    content: "\f0d7";
-}
-
-th.sortable:hover::after {
-    color: #5266ec;
-}
-
-.icon-hv {
-    font-size: 20px;
-    transition: font-size 0.3s ease;
-}
-
-.icon-hv:hover {
-    font-size: 25px;
-}
 </style>

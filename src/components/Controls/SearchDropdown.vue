@@ -98,7 +98,6 @@ watch(searchQuery, () => {
     right: 0;
     z-index: 1000;
     background-color: var(--hope-colors-bg, white);
-    border: 1px solid #ccc;
     border-radius: 0.375rem;
     max-height: 250px;
     overflow-y: auto;
@@ -116,5 +115,9 @@ watch(searchQuery, () => {
 .search-item:hover {
     background-color: var(--hope-colors-primary9, #3a57e8);
     color: var(--hope-colors-white, #ffffff);
+}
+
+.dark .search-dropdown {
+background-color: var(--hope-colors-bg, #222738);
 }
 </style>

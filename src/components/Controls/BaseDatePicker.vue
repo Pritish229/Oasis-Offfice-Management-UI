@@ -6,12 +6,18 @@
         <small v-if="is_required" class="text-danger">*</small>
       </label>
 
-      <VueDatePicker :model-value="field.value" @update:model-value="val => {
-        field.onChange(val)
-        field.onBlur()
-      }" :enable-time-picker="false" :placeholder="placeholder" :auto-apply="true" :hide-input-icon="true"
-        :from-input="true" :state="(meta.touched || meta.validated) ? !errorMessage : null"
-        input-class="form-control pe-5" />
+      <VueDatePicker
+        :model-value="field.value"
+        @update:model-value="val => field.onChange(val)"
+        @blur="field.onBlur"
+        :enable-time-picker="false"
+        :placeholder="placeholder"
+        :auto-apply="true"
+        :hide-input-icon="true"
+        :from-input="true"
+        :state="(meta.touched || meta.validated) ? !errorMessage : null"
+        input-class-name="form-control pe-5"
+      />
 
       <!-- Error icon -->
       <span v-if="(meta.touched || meta.validated) && errorMessage" class="position-absolute validation-icon">
@@ -19,10 +25,7 @@
           <font-awesome-icon icon="exclamation" />
         </div>
       </span>
-
-      <div v-if="meta.touched && errorMessage" class="invalid-feedback">
-        {{ errorMessage }}
-      </div>
+      <small class="text-danger">{{ errorMessage }}</small>
     </Field>
   </div>
 </template>
@@ -51,7 +54,7 @@ defineProps({
 }
 
 .validation-icon {
-  top: 52%;
+  top: 40%;
   right: 0.8rem;
   transform: translateY(30%);
   position: absolute;

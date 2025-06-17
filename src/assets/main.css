@@ -55,6 +55,10 @@ html {
 .dark .input-group-text {
   border: 1px solid #8a92a6 !important;
 }
+
+.dark .bh-mr-2 {
+    color: white !important;
+}
 @media (max-width: 767px) {
   html {
     font-size: 100%; /* 16px on phone screens */

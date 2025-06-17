@@ -62,7 +62,7 @@ export const routes = [
           {
             path: 'manage',
             name: 'ManageUsers',
-            component: () => import('@/views/Dashboard/MangeUsers/UserList.vue'),
+            component: () => import('@/views/Dashboard/ManageUsers/UserList.vue'),
             meta: {
               permissions: ['manage-users'],
               title: 'Manage Users',
@@ -75,7 +75,7 @@ export const routes = [
           {
             path: 'add',
             name: 'AddUsers',
-            component: () => import('@/views/Dashboard/MangeUsers/Addusers.vue'),
+            component: () => import('@/views/Dashboard/ManageUsers/Addusers.vue'),
             meta: {
               permissions: ['create-users'],
               title: 'Add Users',

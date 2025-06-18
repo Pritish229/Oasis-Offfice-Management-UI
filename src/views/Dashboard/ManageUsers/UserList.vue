@@ -36,19 +36,19 @@
             @change="changeServer"
         >
             <!-- Status Column -->
-            <template #item-status="{ row }">
-                <span :class="['badge', row.status === '1' ? 'bg-success' : 'bg-secondary']">
-                    {{ row.status === '1' ? 'Active' : 'Inactive' }}
+            <template #item-status="rows">
+                <span :class="['badge', rows.value.status === '1' ? 'bg-success' : 'bg-secondary']">
+                    {{ rows.status === '1' ? 'Active' : 'Inactive' }}
                 </span>
             </template>
 
             <!-- Actions Column -->
-            <template #actions="{ row }">
+            <template #actions="rows">
                 <div class="d-flex justify-content-start gap-3">
-                    <router-link :to="`/app`" title="View">
+                    <router-link :to="`/app/users/Details/${rows.value._id}`" title="View">
                         <FontAwesomeIcon :icon="['fas', 'fa-eye']" class="text-success"/>
                     </router-link>
-                    <router-link :to="`/app`" title="Edit">
+                    <router-link :to="`/app/users/Update/${rows.value._id}`" title="Edit">
                         <FontAwesomeIcon :icon="['fas', 'fa-pen-to-square']" />
                     </router-link>
                 </div>
@@ -83,8 +83,8 @@ const cols = ref([
     { field: 'fullName', title: 'Full Name', sortable: true },
     { field: 'email', title: 'Email', sortable: true },
     { field: 'contactNo', title: 'Contact Number', sortable: true },
-    { field: 'status', title: 'Status', sortable: true },
-    { field: 'actions', title: 'Actions', sortable: false },
+    { field: 'status', title: 'Status', sort: false },
+    { field: 'actions', title: 'Actions', sort: false },
 ]);
 
 const getUsers = async () => {

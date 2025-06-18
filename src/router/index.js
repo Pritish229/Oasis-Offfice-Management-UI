@@ -86,7 +86,35 @@ export const routes = [
                 { label: 'Add Users', to: '/app/users/add' }
               ]
             }
-          }
+          },
+          {
+            path: 'Update/:id',
+            name: 'UpdateUsers',
+            component: () => import('@/views/Dashboard/ManageUsers/UpdateUser.vue'),
+            meta: {
+              permissions: ['manage-users' , 'edit-profile'],
+              title: 'Update User',
+              breadcrumb: [
+                { label: 'Home', to: '/app/dashboard' },
+                { label: 'Manage Users', to: '/app/users/manage' },
+                { label: 'Update User', to: '/app/users/Update/:id'}
+              ]
+            }
+          },
+          {
+            path: 'Details/:id',
+            name: 'UserDetails                                                                                                                                                                                              ',
+            component: () => import('@/views/Dashboard/ManageUsers/UserDetails.vue'),
+            meta: {
+              permissions: ['manage-users' , 'view-profile'],
+              title: 'User Details',
+              breadcrumb: [
+                { label: 'Home', to: '/app/dashboard' },
+                { label: 'Manage Users', to: '/app/users/manage' },
+                { label: 'User Details', to: '/app/users/Details/:id' }
+              ]
+            }
+          },
         ]
       }
     ]

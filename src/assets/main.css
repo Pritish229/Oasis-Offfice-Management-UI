@@ -68,8 +68,9 @@ html {
   color: black;
 }
 
-.bh-table-responsive table.bh-table-hover tbody tr:hover{
-  background-color:#ffffff96 !important;
+.bh-pagination .bh-page-item.bh-active{
+  border-color:var(--bs-primary) !important;
+  background-color:var(--bs-primary) !important;
 }
 
 @media (max-width: 767px) {

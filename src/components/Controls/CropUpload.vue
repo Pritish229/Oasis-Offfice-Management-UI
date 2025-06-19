@@ -22,7 +22,7 @@
                 :stencil-props="stencilOptions" :background="true" :autoZoom="true" />
             <div class="d-flex justify-content-end m-3" style="">
                 <a href="javascript:;" class="btn btn-primary me-2" @click="cropImage">Crop</a>
-                <button class="btn btn-outline-light" @click="reset">Cancel</button>
+                <button class="btn btn-gray" @click="reset">Cancel</button>
             </div>
         </div>
 
@@ -160,6 +160,9 @@ const reset = () => {
     background-color: #f9f9f9;
     text-align: center;
     overflow: hidden;
+}
+.vue-advanced-cropper__background, .vue-advanced-cropper__foreground{
+    background: transparent !important;
 }
 
 .drop-area.dragging {

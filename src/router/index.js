@@ -65,7 +65,7 @@ export const routes = [
             name: 'ManageUsers',
             component: () => import('@/views/Dashboard/ManageUsers/UserList.vue'),
             meta: {
-              permissions: ['manage-users'],
+              permissions: ['view-users'],
               title: 'Manage Users',
               breadcrumb: [
                 { label: 'Home', to: '/app/dashboard' },
@@ -78,7 +78,7 @@ export const routes = [
             name: 'AddUsers',
             component: () => import('@/views/Dashboard/ManageUsers/Addusers.vue'),
             meta: {
-              permissions: ['create-users'],
+              permissions: ['manage-users','create-users'],
               title: 'Add Users',
               breadcrumb: [
                 { label: 'Home', to: '/app/dashboard' },
@@ -92,7 +92,7 @@ export const routes = [
             name: 'UpdateUsers',
             component: () => import('@/views/Dashboard/ManageUsers/UpdateUser.vue'),
             meta: {
-              permissions: ['manage-users' , 'edit-profile'],
+              permissions: ['manage-users' , 'update-users'],
               title: 'Update User',
               breadcrumb: [
                 { label: 'Home', to: '/app/dashboard' },
@@ -106,7 +106,7 @@ export const routes = [
             name: 'UserDetails                                                                                                                                                                                              ',
             component: () => import('@/views/Dashboard/ManageUsers/UserDetails.vue'),
             meta: {
-              permissions: ['manage-users' , 'view-profile'],
+              permissions: ['manage-users' , 'view-users-details'],
               title: 'User Details',
               breadcrumb: [
                 { label: 'Home', to: '/app/dashboard' },

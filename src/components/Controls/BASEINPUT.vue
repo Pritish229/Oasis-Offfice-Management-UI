@@ -5,7 +5,6 @@
       <small v-if="is_required" class="text-danger">*</small>
     </label>
     <Field :name="name" :rules="rules" v-slot="{ field, errors, meta }" >
-      {{ meta.touched }}
       <input v-bind="field" :type="type" :id="name"
         :class="['form-control', { 'is-invalid': errors.length, 'is-valid': meta.valid && meta.touched }]" :placeholder="placeholder"  />
     </Field>

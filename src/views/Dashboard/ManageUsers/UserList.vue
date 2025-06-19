@@ -36,9 +36,9 @@
             @change="changeServer"
         >
             <!-- Status Column -->
-            <template #item-status="rows">
-                <span :class="['badge', rows.value.status === '1' ? 'bg-success' : 'bg-secondary']">
-                    {{ rows.status === '1' ? 'Active' : 'Inactive' }}
+            <template #status="rows">
+                <span :class="['badge badge-pill', rows.value.status === 1 ? 'bg-success' : 'bg-secondary']">
+                    {{ rows.value.status === 1 ? 'Active' : 'Inactive' }}
                 </span>
             </template>
 

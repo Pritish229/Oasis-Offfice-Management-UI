@@ -35,16 +35,16 @@
                 <div class="profile-img position-relative me-3 mb-3 mb-lg-0 profile-logo profile-logo1">
                   <img src="/assets/images/avatars/01.png" alt="User-Profile"
                     class="theme-color-default-img img-fluid rounded-pill avatar-100">
-                    <img src="/assets/images/avatars/avtar_1.png" alt="User-Profile"
-                      class="theme-color-purple-img img-fluid rounded-pill avatar-100">
+                  <img src="/assets/images/avatars/avtar_1.png" alt="User-Profile"
+                    class="theme-color-purple-img img-fluid rounded-pill avatar-100">
                   <img src="/assets/images/avatars/avtar_2.png" alt="User-Profile"
                     class="theme-color-blue-img img-fluid rounded-pill avatar-100">
-                    <img src="/assets/images/avatars/avtar_3.png" alt="User-Profile"
-                      class="theme-color-pink-img img-fluid rounded-pill avatar-100">
+                  <img src="/assets/images/avatars/avtar_3.png" alt="User-Profile"
+                    class="theme-color-pink-img img-fluid rounded-pill avatar-100">
                   <img src="/assets/images/avatars/avtar_4.png" alt="User-Profile"
                     class="theme-color-green-img img-fluid rounded-pill avatar-100">
                   <img src="/assets/images/avatars/avtar_5.png" alt="User-Profile"
-                  class="theme-color-yellow-img img-fluid rounded-pill avatar-100">
+                    class="theme-color-yellow-img img-fluid rounded-pill avatar-100">
                 </div>
                 <!-- User Info -->
                 <div class="mb-3 mb-sm-0">
@@ -63,17 +63,19 @@
           <nav>
             <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
               <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
-                type="button" role="tab" aria-controls="nav-home" aria-selected="true">Personal Info</button>
+                type="button" role="tab" aria-controls="nav-home" aria-selected="true">User Details</button>
               <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
-                type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Contact Info</button>
+                type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Documents</button>
               <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
-                type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Permissions</button>
+                type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Attendance</button>
             </div>
           </nav>
 
           <div class="tab-content" id="nav-tabContent">
             <!-- Personal Info Tab -->
             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+              <h4>Personal Details</h4>
+              <hr style="border-top: 1px solid black;">
               <div class="row">
                 <div class="col-md-6 mb-3"><strong>Full Name:</strong>
                   <div>{{ userdata.fullName }}</div>
@@ -94,10 +96,8 @@
                   <div>{{ formatDate(userdata.dobRaw) }}</div>
                 </div>
               </div>
-            </div>
-
-            <!-- Contact Info Tab -->
-            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+              <h4>Contact Details</h4>
+              <hr style="border-top: 1px solid black;">
               <div class="row">
                 <div class="col-md-6 mb-3"><strong>Email:</strong>
                   <div>{{ userdata.email }}</div>
@@ -120,17 +120,17 @@
               </div>
             </div>
 
+            <!-- Contact Info Tab -->
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+              <h5>Documents</h5>
+            </div>
+
             <!-- Permissions Tab -->
             <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
               <div class="row">
                 <div class="col-12 mb-3">
-                  <h5 class="mb-3">Permissions</h5>
-                  <div class="d-flex flex-wrap gap-3">
-                    <span v-for="(perm, index) in permissions" :key="index"
-                      class="badge bg-primary text-capitalize px-3 py-2">
-                      {{ formatPermission(perm) }}
-                    </span>
-                  </div>
+                  <h5 class="mb-3">Attendance</h5>
+
                 </div>
               </div>
             </div>
@@ -177,13 +177,6 @@ const formatDate = (dob) => {
   return dob ? dayjs(dob).format('DD MMMM YYYY') : '-';
 };
 
-const formatPermission = (perm) => {
-  if (!perm || !perm.name) return '-';
-  return perm.name
-    .split('-')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-};
 
 const fatchUser = async () => {
   loading.value = true;

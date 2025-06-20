@@ -78,7 +78,7 @@ const params = reactive({
 });
 
 const cols = ref([
-    { field: 'index', title: 'SL No', isUnique: true },
+    { field: 'index', title: 'SL No', isUnique: true , sort:false },
     { field: 'username', title: 'Username', sortable: true },
     { field: 'fullName', title: 'Full Name', sortable: true },
     { field: 'email', title: 'Email', sortable: true },

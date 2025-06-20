@@ -5,33 +5,34 @@
       <small v-if="is_required" class="text-danger">*</small>
     </label>
 
-    <Field :name="name" :rules="rules" v-slot="{ field, errors, meta }">
-      <textarea
-        v-bind="field"
-        :id="name"
-        :rows="rows"
-        :placeholder="placeholder"
-        class="form-control"
-        :class="{
-          'is-invalid': errors.length,
-          'is-valid': meta.valid && meta.touched
-        }"
-      ></textarea>
-    </Field>
+    <textarea
+      v-model="value"
+      :id="name"
+      :rows="rows"
+      :placeholder="placeholder"
+      class="form-control"
+      @blur="handleBlur"
+      :class="{
+        'is-invalid': errorMessage,
+        'is-valid': meta.valid && meta.touched
+      }"
+    ></textarea>
 
-    <ErrorMessage :name="name" class="invalid-feedback" />
+    <div v-if="errorMessage" class="invalid-feedback">{{ errorMessage }}</div>
   </div>
 </template>
 
 <script setup>
-import { Field, ErrorMessage } from 'vee-validate'
+import { useField } from 'vee-validate'
 
-defineProps({
+const props = defineProps({
   name: { type: String, required: true },
   label: { type: String, required: true },
-  rules: { type: String, default: '' },
+  rules: { type: [String, Object], default: '' },
   is_required: { type: Boolean, default: false },
   rows: { type: Number, default: 3 },
-  placeholder: { type: String, default: '' },
+  placeholder: { type: String, default: '' }
 })
+
+const { value, errorMessage, meta, handleBlur } = useField(props.name, props.rules)
 </script>

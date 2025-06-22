@@ -27,7 +27,7 @@
             :sortDirection="params.sort_direction" skin="bh-table-hover" @change="changeServer">
             <!-- Status Column -->
             <template #status="rows">
-                <span :class="['badge badge-pill', rows.value.status === 1 ? 'bg-success' : 'bg-secondary']">
+                <span :class="['badge badge-pill', rows.value.status === 1 ? 'bg-success' : 'bg-danger']">
                     {{ rows.value.status === 1 ? 'Active' : 'Inactive' }}
                 </span>
             </template>

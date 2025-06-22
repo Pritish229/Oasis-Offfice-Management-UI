@@ -65,3 +65,18 @@ const handleCancel = () => {
 
 defineExpose({ show, hide, modalRef })
 </script>
+
+<style scoped>
+.dark .modal-content{
+  background-color: #151824;
+}
+
+.dark .modal-footer{
+  border-top: none !important;
+  border-bottom: solid #5a5a5e54;
+}
+.dark .modal-header{
+  border-top: solid #5a5a5e54;
+  border-bottom: none !important;
+}
+</style>

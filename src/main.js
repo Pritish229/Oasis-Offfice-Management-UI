@@ -12,6 +12,10 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import '@bhplugin/vue3-datatable/dist/style.css';
 
+import "bootstrap/dist/js/bootstrap.min.js";
+
+
+
 library.add(fas)
 
 const app = createApp(App)

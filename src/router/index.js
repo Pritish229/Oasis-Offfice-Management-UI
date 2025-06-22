@@ -122,7 +122,7 @@ export const routes = [
         name: 'managerole',
         component: () => import('@/views/Dashboard/ManageRolePermission/RolePermission.vue'),
         meta: {
-          permissions: ['manage-role' , 'view-role'],
+          permissions: ['manage-role'],
           title: 'Manage Roles',
           breadcrumb: [
             { label: 'Home', to: '/app/dashboard' },

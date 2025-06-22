@@ -4,34 +4,39 @@
       {{ label }}
       <small v-if="is_required" class="text-danger">*</small>
     </label>
-    <Field :name="name" :rules="rules" v-slot="{ field, errors, meta }" >
-      <input v-bind="field" :type="type" :id="name"
-        :class="['form-control', { 'is-invalid': errors.length, 'is-valid': meta.valid && meta.touched }]" :placeholder="placeholder"  />
-    </Field>
-    <ErrorMessage :name="name" class="invalid-feedback" />
+
+    <input
+      v-model="value"
+      :id="name"
+      :type="type"
+      :placeholder="placeholder"
+      @blur="handleBlur"
+      class="form-control"
+      :class="{
+        'is-invalid': errorMessage,
+        'is-valid': meta.valid && meta.touched
+      }"
+    />
+
+    <div v-if="errorMessage" class="invalid-feedback">{{ errorMessage }}</div>
   </div>
 </template>
 
 <script setup>
-import { Field, ErrorMessage } from 'vee-validate'
+import { useField } from 'vee-validate'
 
-defineProps({
+const props = defineProps({
   name: { type: String, required: true },
-  placeholder:{type:String , default:'Enter place holder'},
   label: { type: String, required: true },
-  rules: { type: String, default: '' },
   type: { type: String, default: 'text' },
-  is_required: { type: Boolean, default: false }
+  placeholder: { type: String, default: '' },
+  is_required: { type: Boolean, default: false },
+  rules: { type: [String, Object], default: '' }
 })
+
+const { value, errorMessage, meta, handleBlur } = useField(props.name, props.rules)
 </script>
 
+<style scoped>
 
-<style>
-.form-control {
-  border: 1px solid #cacaca;
-}
-
-.dark .form-control {
-  border: 1px solid #8a8787;
-}
 </style>

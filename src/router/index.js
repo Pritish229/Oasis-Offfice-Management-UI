@@ -39,6 +39,7 @@ export const routes = [
   {
     path: '/app',
     component: () => import('@/components/LAYOUT/APPLayout.vue'),
+    redirect:'/app/dashboard',
     meta: { requiresAuth: true },
     children: [
       {
@@ -62,9 +63,9 @@ export const routes = [
           {
             path: 'manage',
             name: 'ManageUsers',
-            component: () => import('@/views/Dashboard/MangeUsers/UserList.vue'),
+            component: () => import('@/views/Dashboard/ManageUsers/UserList.vue'),
             meta: {
-              permissions: ['manage-users'],
+              permissions: ['view-users'],
               title: 'Manage Users',
               breadcrumb: [
                 { label: 'Home', to: '/app/dashboard' },
@@ -75,9 +76,9 @@ export const routes = [
           {
             path: 'add',
             name: 'AddUsers',
-            component: () => import('@/views/Dashboard/MangeUsers/Addusers.vue'),
+            component: () => import('@/views/Dashboard/ManageUsers/Addusers.vue'),
             meta: {
-              permissions: ['create-users'],
+              permissions: ['manage-users','create-users'],
               title: 'Add Users',
               breadcrumb: [
                 { label: 'Home', to: '/app/dashboard' },
@@ -85,7 +86,35 @@ export const routes = [
                 { label: 'Add Users', to: '/app/users/add' }
               ]
             }
-          }
+          },
+          {
+            path: 'Update/:id',
+            name: 'UpdateUsers',
+            component: () => import('@/views/Dashboard/ManageUsers/UpdateUser.vue'),
+            meta: {
+              permissions: ['manage-users' , 'update-users'],
+              title: 'Update User',
+              breadcrumb: [
+                { label: 'Home', to: '/app/dashboard' },
+                { label: 'Manage Users', to: '/app/users/manage' },
+                { label: 'Update User', to: '/app/users/Update/:id'}
+              ]
+            }
+          },
+          {
+            path: 'Details/:id',
+            name: 'UserDetails                                                                                                                                                                                              ',
+            component: () => import('@/views/Dashboard/ManageUsers/UserDetails.vue'),
+            meta: {
+              permissions: ['manage-users' , 'view-users-details'],
+              title: 'User Details',
+              breadcrumb: [
+                { label: 'Home', to: '/app/dashboard' },
+                { label: 'Manage Users', to: '/app/users/manage' },
+                { label: 'User Details', to: '/app/users/Details/:id' }
+              ]
+            }
+          },
         ]
       }
     ]
@@ -95,6 +124,11 @@ export const routes = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes
+})
+
+router.afterEach((to) => {
+  const defaultTitle = 'My App' // Change this to your app's default title
+  document.title = to.meta.title || defaultTitle
 })
 
 router.beforeEach(async (to, from, next) => {

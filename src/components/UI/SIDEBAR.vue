@@ -58,6 +58,12 @@
               <span class="item-name">Dashboard</span>
             </router-link>
           </li>
+          <li class="nav-item" v-if="hasPermission('manage-role')">
+            <router-link to="/app/managerole" class="nav-link" :class="{ active: route.path === '/app/managerole' }">
+              <FontAwesomeIcon :icon="['fas', 'lock']" />
+              <span class="item-name">Manage Roles</span>
+            </router-link>
+          </li>
 
           <li>
             <hr class="hr-horizontal" />

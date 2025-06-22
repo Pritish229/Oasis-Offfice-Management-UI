@@ -38,17 +38,5 @@ const { value, errorMessage, meta, handleBlur } = useField(props.name, props.rul
 </script>
 
 <style scoped>
-.form-control {
-  border: 1px solid #cacaca;
-  transition: border-color 0.2s;
-}
-.form-control.is-valid {
-  border-color: #198754;
-}
-.form-control.is-invalid {
-  border-color: #dc3545;
-}
-.dark .form-control {
-  border: 1px solid #8a8787;
-}
+
 </style>

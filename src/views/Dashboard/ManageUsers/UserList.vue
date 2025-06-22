@@ -22,19 +22,9 @@
         </div>
 
         <!-- Data Table -->
-        <vue3-datatable
-            :rows="rows"
-            :columns="cols"
-            :loading="loading"
-            :sortable="true"
-            :totalRows="total_rows"
-            :isServerMode="true"
-            :pageSize="params.pagesize"
-            :sortColumn="params.sort_column"
-            :sortDirection="params.sort_direction"
-            skin="bh-table-hover"
-            @change="changeServer"
-        >
+        <vue3-datatable :rows="rows" :columns="cols" :loading="loading" :sortable="true" :totalRows="total_rows"
+            :isServerMode="true" :pageSize="params.pagesize" :sortColumn="params.sort_column"
+            :sortDirection="params.sort_direction" skin="bh-table-hover" @change="changeServer">
             <!-- Status Column -->
             <template #status="rows">
                 <span :class="['badge badge-pill', rows.value.status === 1 ? 'bg-success' : 'bg-secondary']">
@@ -46,7 +36,7 @@
             <template #actions="rows">
                 <div class="d-flex justify-content-start gap-3">
                     <router-link :to="`/app/users/Details/${rows.value._id}`" title="View">
-                        <FontAwesomeIcon :icon="['fas', 'fa-eye']" class="text-success"/>
+                        <FontAwesomeIcon :icon="['fas', 'fa-eye']" class="text-success" />
                     </router-link>
                     <router-link :to="`/app/users/Update/${rows.value._id}`" title="Edit">
                         <FontAwesomeIcon :icon="['fas', 'fa-pen-to-square']" />
@@ -78,7 +68,7 @@ const params = reactive({
 });
 
 const cols = ref([
-    { field: 'index', title: 'SL No', isUnique: true , sort:false },
+    { field: 'index', title: 'SL No', isUnique: true, sort: false },
     { field: 'username', title: 'Username', sortable: true },
     { field: 'fullName', title: 'Full Name', sortable: true },
     { field: 'email', title: 'Email', sortable: true },
@@ -135,6 +125,4 @@ onMounted(() => {
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

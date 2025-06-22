@@ -24,34 +24,41 @@
         <div class="col-lg-12">
           <div class="card position-relative">
             <!-- Status Badge -->
-            <span class="position-absolute top-0 end-0 m-3 badge rounded-pill"
-              :class="userdata.status === 1 ? 'bg-success' : 'bg-danger'">
-              {{ userdata.status === 1 ? 'Active' : 'Inactive' }}
-            </span>
+
 
             <div class="card-body">
-              <div class="d-flex flex-wrap align-items-center">
+              <div class="">
                 <!-- Avatar -->
-                <div class="profile-img position-relative me-3 mb-3 mb-lg-0 profile-logo profile-logo1">
-                  <img src="/assets/images/avatars/01.png" alt="User-Profile"
-                    class="theme-color-default-img img-fluid rounded-pill avatar-100">
-                  <img src="/assets/images/avatars/avtar_1.png" alt="User-Profile"
-                    class="theme-color-purple-img img-fluid rounded-pill avatar-100">
-                  <img src="/assets/images/avatars/avtar_2.png" alt="User-Profile"
-                    class="theme-color-blue-img img-fluid rounded-pill avatar-100">
-                  <img src="/assets/images/avatars/avtar_3.png" alt="User-Profile"
-                    class="theme-color-pink-img img-fluid rounded-pill avatar-100">
-                  <img src="/assets/images/avatars/avtar_4.png" alt="User-Profile"
-                    class="theme-color-green-img img-fluid rounded-pill avatar-100">
-                  <img src="/assets/images/avatars/avtar_5.png" alt="User-Profile"
-                    class="theme-color-yellow-img img-fluid rounded-pill avatar-100">
+                <div class="d-flex flex-wrap align-items-center">
+                  <div class="profile-img position-relative me-3 mb-3 mb-lg-0 profile-logo profile-logo1">
+                    <img src="/assets/images/avatars/01.png" alt="User-Profile"
+                      class="theme-color-default-img img-fluid rounded-pill avatar-100">
+                    <img src="/assets/images/avatars/avtar_1.png" alt="User-Profile"
+                      class="theme-color-purple-img img-fluid rounded-pill avatar-100">
+                    <img src="/assets/images/avatars/avtar_2.png" alt="User-Profile"
+                      class="theme-color-blue-img img-fluid rounded-pill avatar-100">
+                    <img src="/assets/images/avatars/avtar_3.png" alt="User-Profile"
+                      class="theme-color-pink-img img-fluid rounded-pill avatar-100">
+                    <img src="/assets/images/avatars/avtar_4.png" alt="User-Profile"
+                      class="theme-color-green-img img-fluid rounded-pill avatar-100">
+                    <img src="/assets/images/avatars/avtar_5.png" alt="User-Profile"
+                      class="theme-color-yellow-img img-fluid rounded-pill avatar-100">
+                    <small class="position-absolute  responsive-badge  badge rounded-pill"
+                      style="top: 7.5rem; right: 2rem;" :class="userdata.status === 1 ? 'bg-success' : 'bg-danger'">
+                      {{ userdata.status === 1 ? 'Active' : 'Inactive' }}
+                  </small>
+                  </div>
+
+
+                  <!-- User Info -->
+                  <div class=" mt-mb-5 pt-6 ">
+                    <h4 class="me-2">{{ userdata.fullName }}</h4>
+                    <span v-for="role in roles" :key="role" class="me-1">{{ role }}</span>
+                  </div>
                 </div>
-                <!-- User Info -->
-                <div class="mb-3 mb-sm-0">
-                  <h4 class="me-2">{{ userdata.fullName }}</h4>
-                  <span v-for="role in roles" :key="role" class="me-1">{{ role }}</span>
-                </div>
+
               </div>
+
             </div>
           </div>
         </div>
@@ -222,7 +229,17 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.placeholder {
-  background-color: #dee2e6;
+
+.responsive-badge {
+    top: 7.7rem;
+    right: 2rem;
+  }
+@media (max-width: 767px) {
+
+  .responsive-badge {
+    top: 6.9rem !important;
+    right: 1.6rem !important;
+  }
+
 }
 </style>

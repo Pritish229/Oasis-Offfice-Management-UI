@@ -1,7 +1,7 @@
 <template>
     <div :class="['image-uploader', customClass]">
       <div v-if="label">
-        <label class="form-label">{{ label }}</label>
+        <label class="">{{ label }}</label>
       </div>
   
       <div v-if="!imageUrl && !previewUrl" class="drop-area" :style="dropAreaStyle"
@@ -31,6 +31,7 @@
         <button class="btn btn-sm remove-btn" @click="reset">×</button>
       </div>
     </div>
+    <small v-if="halpertext">{{ halpertext }}</small>
   </template>
   
   <script setup>
@@ -40,6 +41,7 @@
   import 'vue-advanced-cropper/dist/theme.compact.css'
   
   const props = defineProps({
+    halpertext:{type:String},
     modelValue: File,
     imageUrl: String,
     width: { type: [String, Number], default: '100%' },

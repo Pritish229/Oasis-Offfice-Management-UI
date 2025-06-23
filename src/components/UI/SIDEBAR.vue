@@ -138,7 +138,7 @@
 <script setup>
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const route = useRoute()

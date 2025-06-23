@@ -9,6 +9,9 @@
                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-permission" type="button">
                         Permission
                     </button>
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nav-users" type="button">
+                        Manage Users
+                    </button>
                 </div>
             </nav>
 
@@ -84,6 +87,9 @@
 
                 <div class="tab-pane fade" id="nav-permission">
                     <p><strong>This is some placeholder content for permissions tab.</strong></p>
+                </div>
+                <div class="tab-pane fade" id="nav-users">
+                    <p><strong>This is some placeholder content for Users tab.</strong></p>
                 </div>
             </div>
         </div>

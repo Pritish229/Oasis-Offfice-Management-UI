@@ -28,10 +28,9 @@
             </svg>
           </div>
         </div>
-        <!--logo End-->
-
         <h4 class="logo-title">Admin</h4>
       </a>
+
       <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
         <i class="icon">
           <svg width="20px" class="icon-20" viewBox="0 0 24 24">
@@ -39,10 +38,19 @@
           </svg>
         </i>
       </div>
-      <div class="input-group nav-search">
 
-        <SearchDropdown />
+      <div class="input-group search-input">
+        <span class="input-group-text" id="search-input">
+          <svg class="icon-18" width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round"></circle>
+            <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </span>
+        <input type="search" class="form-control" placeholder="Search...">
       </div>
+
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon">
@@ -51,11 +59,9 @@
           <span class="navbar-toggler-bar bar3"></span>
         </span>
       </button>
+
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="mb-2 navbar-nav ms-auto align-items-center navbar-list mb-lg-0">
-
-
-
           <li class="nav-item dropdown">
             <a class="py-0 nav-link d-flex align-items-center" href="#" id="navbarDropdown" role="button"
               data-bs-toggle="dropdown" aria-expanded="false">
@@ -71,13 +77,15 @@
                 class="theme-color-yellow-img img-fluid avatar avatar-50 avatar-rounded">
               <img src="/assets/images/avatars/avtar_3.png" alt="User-Profile"
                 class="theme-color-pink-img img-fluid avatar avatar-50 avatar-rounded">
-              <div class="caption ms-3 d-none d-md-block ">
+              <div class="caption ms-3 d-none d-md-block">
                 <h6 class="mb-0 caption-title">{{ userDetails.email }}</h6>
                 <p class="mb-0 caption-sub-title">{{ userDetails.username }}</p>
               </div>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end " aria-labelledby="dropdownMenuButtonSM">
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
               <li><router-link to="/app/profile" class="dropdown-item" href="">Profile</router-link></li>
+              <li><a class="dropdown-item" href="">Privacy Setting</a>
+              </li>
               <li>
                 <hr class="dropdown-divider">
               </li>
@@ -85,60 +93,33 @@
               </li>
             </ul>
           </li>
-
         </ul>
       </div>
     </div>
   </nav>
-
 </template>
 
 <script setup>
 import Swal from 'sweetalert2'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { onMounted,ref,reactive,onBeforeUnmount } from 'vue'
-import SearchDropdown  from '@/components/Controls/SearchDropdown.vue'
-
-const isSmallScreen = ref(window.innerWidth < 576)
-
-const handleResize = () => {
-  isSmallScreen.value = window.innerWidth < 576
-}
-
-onMounted(() => {
-  window.addEventListener('resize', handleResize)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', handleResize)
-})
-
+import { onMounted, ref, reactive, nextTick } from 'vue'
+import * as bootstrap from 'bootstrap'
 
 const auth = useAuthStore()
-
-
 const userDetails = reactive({
-  username : '',
-  email:'',
-  fullName:'',
-  gender:'',
-  maritalStatus:'',
-}) 
-
-
-const fatchuser = async () => {
-  const user = await auth.user;
-  
-  userDetails.username = user.username
-  userDetails.email = user.email
-  
-}
-
-onMounted( () => {
- fatchuser()
+  username: '',
+  email: '',
+  fullName: '',
+  gender: '',
+  maritalStatus: '',
 })
 
+const fatchuser = async () => {
+  const user = await auth.user
+  userDetails.username = user.username
+  userDetails.email = user.email
+}
 
 const router = useRouter()
 
@@ -170,12 +151,4 @@ const logout = async () => {
 
 
 
-
-
 </script>
-
-<style scoped>
-.dark .input-group-text{
-  border-color:#30384f ;
-}
-</style>

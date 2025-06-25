@@ -1,5 +1,5 @@
 <template>
-  <nav class="nav navbar navbar-expand-lg navbar-light iq-navbar navs-sticky">
+  <nav :key="auth.permissions.join('-')" class="nav navbar navbar-expand-lg navbar-light iq-navbar navs-sticky">
     <div class="container-fluid navbar-inner">
       <a href="" class="navbar-brand">
         <div class="logo-main">
@@ -167,6 +167,8 @@ const logout = async () => {
   }
 
 }
+
+
 
 
 

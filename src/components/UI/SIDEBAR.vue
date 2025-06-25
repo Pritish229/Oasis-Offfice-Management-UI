@@ -1,5 +1,5 @@
 <template>
-  <aside :class="sidebarClasses">
+  <aside :key="auth.permissions.join('-')" :class="sidebarClasses">
     <div class="sidebar-header d-flex align-items-center justify-content-start">
       <router-link to="/app/dashboard" class="navbar-brand">
         <div class="logo-main">
@@ -150,13 +150,10 @@ import { useAuthStore } from '@/stores/auth'
 import { ref, reactive, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-// Get current route and auth store
 const route = useRoute()
 const auth = useAuthStore()
 
-// Track screen size for mobile sidebar
 const isMobile = ref(false)
-
 const checkScreenSize = () => {
   isMobile.value = window.innerWidth <= 768
 }
@@ -171,41 +168,33 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', checkScreenSize)
 })
 
-// Compute sidebar class based on screen size
 const sidebarClasses = computed(() => {
-  const baseClasses = ['sidebar', 'sidebar-default', 'sidebar-white', 'sidebar-base', 'navs-rounded-all']
-  if (isMobile.value) baseClasses.push('sidebar-mini')
-  return baseClasses
+  const base = ['sidebar', 'sidebar-default', 'sidebar-white', 'sidebar-base', 'navs-rounded-all']
+  if (isMobile.value) base.push('sidebar-mini')
+  return base
 })
 
-// Permission check helper
-const hasPermission = (permissions) => {
-  if (!Array.isArray(permissions)) {
-    permissions = [permissions]
+const hasPermission = (perms) => {
+  if (!Array.isArray(perms)) perms = [perms]
+  return perms.some(p => auth.permissions?.includes(p))
+}
+
+const dropdownState = reactive({ users: false, roles: false })
+const updateDropdownStateFromRoute = (path) => {
+  Object.keys(dropdownState).forEach(k => dropdownState[k] = path.startsWith(`/app/${k}`))
+}
+
+watch(() => route.path, updateDropdownStateFromRoute)
+
+const toggleDropdown = (menu) => dropdownState[menu] = !dropdownState[menu]
+
+const permissionsKey = computed(() => auth.permissions.join('-'))
+
+watch(
+  () => auth.permissions.join('-'),
+  () => {
+    console.log('Permissions changed in Sidebar')
   }
-  return permissions.some(perm => auth.permissions?.includes(perm))
-}
-// Reactive state for multiple dropdowns
-const dropdownState = reactive({
-  users: false,
-  roles: false,
-  // add other keys as needed
-})
-
-// Update dropdown open state based on route
-function updateDropdownStateFromRoute(path) {
-  Object.keys(dropdownState).forEach((key) => {
-    dropdownState[key] = path.startsWith(`/app/${key}`)
-  })
-}
-
-// Watch route changes
-watch(() => route.path, (newPath) => {
-  updateDropdownStateFromRoute(newPath)
-})
-
-// Toggle dropdown manually
-function toggleDropdown(menu) {
-  dropdownState[menu] = !dropdownState[menu]
-}
+)
 </script>
+

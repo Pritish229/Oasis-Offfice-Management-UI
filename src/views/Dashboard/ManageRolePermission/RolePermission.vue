@@ -365,7 +365,13 @@ const fetchRolePermissions = async (roleId) => {
 const togglePermission = async (permissionId, allow) => {
     if (!selectedRole.value?._id) return Swal.fire('Error', 'No role selected', 'error')
     try {
-        await axios.post(`${API_URL}/roles/${selectedRole.value._id}/permissions`, { permissionId, allow })
+        const response = await axios.post(`${API_URL}/roles/${selectedRole.value._id}/permissions`, { permissionId, allow })
+
+        console.log();
+        if (response.status === 200) {
+            await auth.fetchProfile()
+        }
+        
         if (allow) assignedPermissions.value.push(permissionId)
         else assignedPermissions.value = assignedPermissions.value.filter(p => p !== permissionId)
     } catch (err) {
@@ -669,26 +675,37 @@ onMounted(() => {
 })
 
 const roleChanged = async (row, selectedRoleIds) => {
-    const payload = {
-        roleIds: selectedRoleIds
-    }
+  const auth = useAuthStore()
+
+  try {
+    Swal.fire({
+      title: 'Updating roles...',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading()
+    })
+
+    const payload = { roleIds: selectedRoleIds }
     const response = await axios.patch(`${API_URL}/roles/${row._id}/roles`, payload)
+    
     if (response.status === 200) {
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'User roles updated successfully',
-            timer: 2000,
-            showConfirmButton: false
-        });
-        await auth.fetchProfile()
+        // This triggers sidebar re-render now
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'User roles updated successfully',
+        timer: 1500,
+        showConfirmButton: false
+      })
     } else {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to update user roles'
-        });
+      throw new Error('Failed to update user roles')
     }
+  } catch (err) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: err.response?.data?.message || err.message || 'Role update failed'
+    })
+  }
 }
 
 </script>

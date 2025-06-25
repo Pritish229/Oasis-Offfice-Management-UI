@@ -54,7 +54,7 @@
             </a>
           </li>
 
-          <li class="nav-item" v-if="hasPermission('view-dashboard')">
+          <li class="nav-item" v-if="hasPermission(['view-dashboard', 'manage-dashboard'])">
             <router-link to="/app/dashboard" class="nav-link" :class="{ active: route.path === '/app/dashboard' }">
               <FontAwesomeIcon :icon="['fas', 'house']" />
               <span class="item-name">Dashboard</span>
@@ -80,7 +80,7 @@
           </li>
 
           <!-- USERS DROPDOWN -->
-          <li class="nav-item" v-if="hasPermission('view-users')">
+          <li class="nav-item" v-if="hasPermission(['view-users', 'manage-users'])">
             <a href="javascript:void(0)" class="nav-link" @click="toggleDropdown('users')"
               :aria-expanded="dropdownState.users" :class="{ collapsed: !dropdownState.users }">
               <FontAwesomeIcon :icon="['fas', 'users']" />
@@ -93,13 +93,13 @@
               </i>
             </a>
             <ul :class="['sub-nav', 'collapse', { show: dropdownState.users }]" id="sidebar-users">
-              <li class="nav-item" v-if="hasPermission('create-users')">
+              <li class="nav-item" v-if="hasPermission(['create-users', 'manage-users'])">
                 <router-link class="nav-link" to="/app/users/add" :class="{ active: route.path === '/app/users/add' }">
                   <FontAwesomeIcon :icon="['fas', 'user-plus']" />
                   <span class="item-name">Add Users</span>
                 </router-link>
               </li>
-              <li class="nav-item" v-if="hasPermission('manage-users')">
+              <li class="nav-item" v-if="hasPermission(['view-users', 'manage-users'])">
                 <router-link class="nav-link" to="/app/users/manage"
                   :class="{ active: route.path === '/app/users/manage' }">
                   <FontAwesomeIcon :icon="['fas', 'users']" />
@@ -179,10 +179,12 @@ const sidebarClasses = computed(() => {
 })
 
 // Permission check helper
-const hasPermission = (permission) => {
-  return auth.permissions?.includes(permission)
+const hasPermission = (permissions) => {
+  if (!Array.isArray(permissions)) {
+    permissions = [permissions]
+  }
+  return permissions.some(perm => auth.permissions?.includes(perm))
 }
-
 // Reactive state for multiple dropdowns
 const dropdownState = reactive({
   users: false,

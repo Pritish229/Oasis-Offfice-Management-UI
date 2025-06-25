@@ -246,6 +246,7 @@ import * as yup from 'yup'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import dayjs from 'dayjs'
+import { useAuthStore } from '@/stores/auth'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
 import '@bhplugin/vue3-datatable/dist/style.css'
 import { API_URL } from '@/config/path'
@@ -256,7 +257,7 @@ import DropdownMenu from '@/components/Controls/DropdownMenu.vue'
 import BaseSelect from '@/components/Controls/BASESELECT.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-
+const auth = useAuthStore()
 const customModal = ref(null)
 const formRef = ref(null)
 const internalSubmit = ref(null)
@@ -680,6 +681,7 @@ const roleChanged = async (row, selectedRoleIds) => {
             timer: 2000,
             showConfirmButton: false
         });
+        await auth.fetchProfile()
     } else {
         Swal.fire({
             icon: 'error',

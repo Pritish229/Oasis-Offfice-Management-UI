@@ -76,10 +76,8 @@
                 <p class="mb-0 caption-sub-title">{{ userDetails.username }}</p>
               </div>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+            <ul class="dropdown-menu dropdown-menu-end " aria-labelledby="dropdownMenuButtonSM">
               <li><router-link to="/app/profile" class="dropdown-item" href="">Profile</router-link></li>
-              <li><a class="dropdown-item" href="">Privacy Setting</a>
-              </li>
               <li>
                 <hr class="dropdown-divider">
               </li>

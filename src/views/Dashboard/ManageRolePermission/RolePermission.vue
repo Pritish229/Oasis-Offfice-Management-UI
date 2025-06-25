@@ -23,7 +23,8 @@
                                 <div class="d-flex align-items-center">
                                     <input class="form-control me-2" type="text" placeholder="Search by Role Name"
                                         v-model="searchTerm" @keyup.enter="applySearch" />
-                                    <button class="btn btn-primary rounded-circle me-2 d-flex align-items-center justify-content-center p-0"
+                                    <button
+                                        class="btn btn-primary rounded-circle me-2 d-flex align-items-center justify-content-center p-0"
                                         style="width: 35px; height: 30px;" @click="applySearch">
                                         <font-awesome-icon :icon="['fas', 'search']" class="fs-6" />
                                     </button>
@@ -38,10 +39,12 @@
 
                         <div class="row g-4">
                             <div class="col-12 col-md-6 col-lg-4" v-for="role in filteredRoles" :key="role._id">
-                                <div class="border border-2 rounded-2 p-3 h-100 d-flex flex-column justify-content-between">
+                                <div
+                                    class="border border-2 rounded-2 p-3 h-100 d-flex flex-column justify-content-between">
                                     <div class="d-flex justify-content-between align-items-center mb-2">
                                         <h6 class="mb-0 fs-5">{{ role.name }}</h6>
-                                        <DropdownMenu :options="menuOptions(role._id)" header="Options" @select="handleSelect">
+                                        <DropdownMenu :options="menuOptions(role._id)" header="Options"
+                                            @select="handleSelect">
                                             <template #trigger>
                                                 <a href="javascript:;" class="text-muted" data-bs-toggle="dropdown">
                                                     <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" />
@@ -68,7 +71,8 @@
                             <h5 class="fw-bold text-muted mb-3">{{ group.groupName }}</h5>
                             <div class="row">
                                 <div class="col-lg-4 col-md-6 mb-3" v-for="perm in group.permissions" :key="perm._id">
-                                    <div class="border border-2 rounded-2 p-3 h-100 d-flex justify-content-between align-items-center">
+                                    <div
+                                        class="border border-2 rounded-2 p-3 h-100 d-flex justify-content-between align-items-center">
                                         <div>
                                             <h6 class="text-muted mb-1">{{ perm.name }}</h6>
                                             <p class="mb-0">{{ perm.description || 'No description available' }}</p>
@@ -94,51 +98,39 @@
                     <div v-for="group in allPermissions" :key="group._id" class="mb-5">
                         <h4 class="fw-bold text-muted my-4 d-flex align-items-center">
                             <!-- Inline editing for group name -->
-                            <div v-if="editingGroupId === group._id" class="d-flex align-items-center">
-                                <input 
-                                    type="text" 
-                                    class="form-control me-2" 
-                                    style="width: 200px;"
-                                    v-model="editingGroupName"
-                                    @keyup.enter="saveEditGroup"
-                                    @keyup.esc="cancelEditGroup"
-                                    ref="groupNameInput"
-                                />
-                                <button 
-                                    class="btn btn-success btn-sm me-1" 
-                                    @click="saveEditGroup"
-                                    title="Save"
-                                >
-                                    <font-awesome-icon :icon="['fas', 'check']" />
-                                </button>
-                                <button 
-                                    class="btn btn-secondary btn-sm" 
-                                    @click="cancelEditGroup"
-                                    title="Cancel"
-                                >
-                                    <font-awesome-icon :icon="['fas', 'times']" />
-                                </button>
+                            <div v-if="editingGroupId === group._id" class=" row">
+                                <div class="col-lg-12 d-flex">
+                                    <input type="text" class="form-control p-1 me-2 w-full" v-model="editingGroupName"
+                                        @keyup.enter="saveEditGroup" @keyup.esc="cancelEditGroup"
+                                        ref="groupNameInput" />
+                                    <div class="d-flex ">
+                                        <button class="btn btn-success btn-sm me-1" @click="saveEditGroup" title="Save">
+                                        Save
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm" @click="cancelEditGroup" title="Cancel">
+                                        Cancle
+                                    </button>
+                                    </div>
+                                </div>
                             </div>
-                            <span 
-                                v-else 
-                                class="group-name-display" 
-                                style="cursor: pointer;"
-                                @click="startEditGroup(group)"
-                                title="Click to edit group name"
-                            >
+                            <span v-else class="group-name-display" style="cursor: pointer;"
+                                @click="startEditGroup(group)" title="Click to edit group name">
                                 {{ group.groupName }}
                             </span>
-                            <span v-if="group.permissions.length === 0" class="ms-2" style="cursor:pointer;" @click="deleteGroup(group)">
+                            <span v-if="group.permissions.length === 0" class="ms-2" style="cursor:pointer;"
+                                @click="deleteGroup(group)">
                                 <font-awesome-icon icon="trash" style="color: #e3342f; font-size: 1.1em;" />
                             </span>
                         </h4>
                         <div class="row g-3">
                             <div v-for="perm in group.permissions" :key="perm._id" class="col-12 col-md-6 col-lg-4">
-                                <div class="border border-2 rounded p-3 h-100 d-flex flex-column justify-content-between">
+                                <div
+                                    class="border border-2 rounded p-3 h-100 d-flex flex-column justify-content-between">
                                     <div>
                                         <div class="d-flex justify-content-between">
                                             <div class="permission-name">{{ perm.name }}</div>
-                                            <DropdownMenu :options="permissionMenuOptions(perm._id)" header="Options" @select="handlePermissionSelect">
+                                            <DropdownMenu :options="permissionMenuOptions(perm._id)" header="Options"
+                                                @select="handlePermissionSelect">
                                                 <template #trigger>
                                                     <a href="javascript:;" class="text-muted" data-bs-toggle="dropdown">
                                                         <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" />
@@ -146,7 +138,8 @@
                                                 </template>
                                             </DropdownMenu>
                                         </div>
-                                        <div class="permission-description text-muted">{{ perm.description || 'No description available' }}</div>
+                                        <div class="permission-description text-muted">
+                                            {{ perm.description || 'No description available' }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -154,18 +147,23 @@
                     </div>
                 </div>
 
-                
+
                 <div class="tab-pane fade" id="nav-users">
                     <div class="row mb-3 justify-content-end">
                         <div class="col-12 col-md-4">
                             <div class="input-group ">
-                                <input class="form-control" type="text" v-model="userParams.search" placeholder="Search Users..." @input="debouncedSearch" />
+                                <input class="form-control" type="text" v-model="userParams.search"
+                                    placeholder="Search Users..." @input="debouncedSearch" />
                             </div>
                         </div>
                     </div>
-                    <vue3-datatable :rows="userRows" :columns="userCols" :loading="userLoading" :totalRows="user_total_rows" :isServerMode="true" :pageSize="userParams.pagesize" :sortable="true" :sortColumn="userParams.sort_column" :sortDirection="userParams.sort_direction" @change="changeServer" skin="bh-table-hover">
+                    <vue3-datatable :rows="userRows" :columns="userCols" :loading="userLoading"
+                        :totalRows="user_total_rows" :isServerMode="true" :pageSize="userParams.pagesize"
+                        :sortable="true" :sortColumn="userParams.sort_column" :sortDirection="userParams.sort_direction"
+                        @change="changeServer" skin="bh-table-hover">
                         <template #roles="data">
                             <!-- Temporarily empty -->
+                            {{ data }}
                         </template>
                     </vue3-datatable>
                 </div>
@@ -177,7 +175,8 @@
     <BaseModal ref="customModal" modalId="customModal" title="Add Role" :showClose="true" submitButtonText="Add New"
         submitButtonClass="btn btn-primary" :onSubmit="triggerSubmit" :onCancel="handleCancel">
         <Form ref="formRef" :validation-schema="schema" @submit="handleSubmit">
-            <BaseInput name="name" label="Role Name" :is_required="true" placeholder="Enter Role Name" helper="Minimum 5 characters." />
+            <BaseInput name="name" label="Role Name" :is_required="true" placeholder="Enter Role Name"
+                helper="Minimum 5 characters." />
             <BaseTextArea name="description" label="Description" placeholder="Enter Description" />
             <button ref="internalSubmit" type="submit" class="d-none" />
         </Form>
@@ -187,23 +186,22 @@
     <BaseModal ref="editModal" modalId="editModal" title="Edit Role" :showClose="true" submitButtonText="Update"
         submitButtonClass="btn btn-primary" :onSubmit="triggerUpdateSubmit" :onCancel="handleCancelEdit">
         <Form ref="editFormRef" :validation-schema="schema" @submit="handleUpdate">
-            <BaseInput name="name" label="Role Name" :is_required="true" placeholder="Enter Role Name" helper="Minimum 5 characters." />
+            <BaseInput name="name" label="Role Name" :is_required="true" placeholder="Enter Role Name"
+                helper="Minimum 5 characters." />
             <BaseTextArea name="description" label="Description" placeholder="Enter Description" />
             <button ref="internalEditSubmit" type="submit" class="d-none" />
         </Form>
     </BaseModal>
 
     <!-- Edit Permission Modal -->
-    <BaseModal ref="editPermissionModal" modalId="editPermissionModal" title="Edit Permission" :showClose="true" submitButtonText="Update" submitButtonClass="btn btn-primary" :onSubmit="triggerUpdatePermissionSubmit" :onCancel="handleCancelEditPermission">
-        <Form ref="editPermissionFormRef" :validation-schema="permissionSchema" @submit="handleUpdatePermission" v-slot="{ errors, setFieldValue }">
+    <BaseModal ref="editPermissionModal" modalId="editPermissionModal" title="Edit Permission" :showClose="true"
+        submitButtonText="Update" submitButtonClass="btn btn-primary" :onSubmit="triggerUpdatePermissionSubmit"
+        :onCancel="handleCancelEditPermission">
+        <Form ref="editPermissionFormRef" :validation-schema="permissionSchema" @submit="handleUpdatePermission"
+            v-slot="{ errors, setFieldValue }">
             <div class="mb-3">
-                <BaseSelect
-                    name="groupName"
-                    label="Group Name"
-                    :options="permissionGroupOptions"
-                    :is_required="true" 
-                    placeholder="Select a group"
-                />
+                <BaseSelect name="groupName" label="Group Name" :options="permissionGroupOptions" :is_required="true"
+                    placeholder="Select a group" />
                 <div v-if="errors.groupName" class="text-danger mt-1">{{ errors.groupName }}</div>
             </div>
             <BaseInput name="name" label="Permission Name" :is_required="true" placeholder="Enter Permission Name" />
@@ -213,16 +211,14 @@
     </BaseModal>
 
     <!-- Add Permission Modal -->
-    <BaseModal ref="addPermissionModal" modalId="addPermissionModal" title="Add Permission" :showClose="true" submitButtonText="Add" submitButtonClass="btn btn-primary" :onSubmit="triggerAddPermissionSubmit" :onCancel="handleCancelAddPermission">
-        <Form ref="addPermissionFormRef" :validation-schema="permissionSchema" @submit="handleAddPermission" v-slot="{ errors, setFieldValue }">
+    <BaseModal ref="addPermissionModal" modalId="addPermissionModal" title="Add Permission" :showClose="true"
+        submitButtonText="Add" submitButtonClass="btn btn-primary" :onSubmit="triggerAddPermissionSubmit"
+        :onCancel="handleCancelAddPermission">
+        <Form ref="addPermissionFormRef" :validation-schema="permissionSchema" @submit="handleAddPermission"
+            v-slot="{ errors, setFieldValue }">
             <div class="mb-3">
-                <BaseSelect
-                    name="groupName"
-                    label="Group Name"
-                    :options="permissionGroupOptions"
-                    :is_required="true" 
-                    placeholder="Select a group"
-                />
+                <BaseSelect name="groupName" label="Group Name" :options="permissionGroupOptions" :is_required="true"
+                    placeholder="Select a group" />
                 <div v-if="errors.groupName" class="text-danger mt-1">{{ errors.groupName }}</div>
             </div>
             <BaseInput name="name" label="Permission Name" :is_required="true" placeholder="Enter Permission Name" />
@@ -271,7 +267,7 @@ const internalEditPermissionSubmit = ref(null)
 const selectedPermission = ref(null)
 const permissionGroupNames = ref([])
 
-const permissionGroupOptions = computed(() => 
+const permissionGroupOptions = computed(() =>
     permissionGroupNames.value.map(name => ({ value: name, label: name }))
 )
 
@@ -593,7 +589,7 @@ const startEditGroup = (group) => {
     editingGroupId.value = group._id
     editingGroupName.value = group.groupName
     originalGroupName.value = group.groupName
-    
+
     // Focus the input field after DOM update
     nextTick(() => {
         const input = document.querySelector('input[ref="groupNameInput"]')
@@ -620,7 +616,7 @@ const saveEditGroup = async () => {
         const response = await axios.put(`${API_URL}/permissions/group/${editingGroupId.value}`, {
             name: editingGroupName.value.trim()
         })
-        
+
         if (response.status === 200) {
             Swal.fire('Success', 'Group name updated successfully', 'success')
             fetchPermissions()
@@ -664,22 +660,28 @@ onMounted(() => {
     width: 2.5em;
     height: 1.4em;
 }
+
 .text-primary {
-  color: #2563eb !important;
+    color: #2563eb !important;
 }
+
 .text-secondary {
-  color: #6c757d !important;
+    color: #6c757d !important;
 }
+
 .permission-name {
     font-weight: 500;
     margin-bottom: 0.25rem;
 }
+
 .permission-description {
     font-size: 0.875rem;
 }
+
 .group-name-display {
     transition: color 0.2s ease;
 }
+
 .group-name-display:hover {
     color: #2563eb !important;
     text-decoration: underline;

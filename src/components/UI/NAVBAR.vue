@@ -130,14 +130,10 @@ const logout = async () => {
   })
 
   if (result.isConfirmed) {
-    localStorage.removeItem('token')
-    await Swal.fire({
-      title: 'Logged out!',
-      text: 'You have been logged out successfully.',
-      icon: 'success',
-      confirmButtonText: 'OK',
-    })
-    router.push('/')
+    auth.logout()  // Properly clear Pinia state + localStorage
+
+
+    router.push('/login')
   }
 }
 

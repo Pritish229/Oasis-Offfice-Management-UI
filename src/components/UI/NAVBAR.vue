@@ -5,33 +5,24 @@
         <div class="logo-main">
           <div class="logo-normal">
             <svg class="text-primary icon-30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)"
-                fill="currentColor" />
-              <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)"
-                fill="currentColor" />
-              <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)"
-                fill="currentColor" />
-              <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)"
-                fill="currentColor" />
+              <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)" fill="currentColor" />
+              <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)" fill="currentColor" />
+              <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor" />
+              <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor" />
             </svg>
           </div>
           <div class="logo-mini">
             <svg class="text-primary icon-30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)"
-                fill="currentColor" />
-              <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)"
-                fill="currentColor" />
-              <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)"
-                fill="currentColor" />
-              <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)"
-                fill="currentColor" />
+              <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)" fill="currentColor" />
+              <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)" fill="currentColor" />
+              <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor" />
+              <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor" />
             </svg>
           </div>
         </div>
-        <!--logo End-->
-
         <h4 class="logo-title">Admin</h4>
       </a>
+
       <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
         <i class="icon">
           <svg width="20px" class="icon-20" viewBox="0 0 24 24">
@@ -39,10 +30,11 @@
           </svg>
         </i>
       </div>
-      <div class="input-group nav-search">
 
+      <div class="input-group nav-search">
         <SearchDropdown />
       </div>
+
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon">
@@ -51,98 +43,77 @@
           <span class="navbar-toggler-bar bar3"></span>
         </span>
       </button>
+
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="mb-2 navbar-nav ms-auto align-items-center navbar-list mb-lg-0">
-
-
-
-          <li class="nav-item dropdown">
-            <a class="py-0 nav-link d-flex align-items-center" href="#" id="navbarDropdown" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              <img src="/assets/images/avatars/01.png" alt="User-Profile"
-                class="theme-color-default-img img-fluid avatar avatar-50 avatar-rounded">
-              <img src="/assets/images/avatars/avtar_1.png" alt="User-Profile"
-                class="theme-color-purple-img img-fluid avatar avatar-50 avatar-rounded">
-              <img src="/assets/images/avatars/avtar_2.png" alt="User-Profile"
-                class="theme-color-blue-img img-fluid avatar avatar-50 avatar-rounded">
-              <img src="/assets/images/avatars/avtar_4.png" alt="User-Profile"
-                class="theme-color-green-img img-fluid avatar avatar-50 avatar-rounded">
-              <img src="/assets/images/avatars/avtar_5.png" alt="User-Profile"
-                class="theme-color-yellow-img img-fluid avatar avatar-50 avatar-rounded">
-              <img src="/assets/images/avatars/avtar_3.png" alt="User-Profile"
-                class="theme-color-pink-img img-fluid avatar avatar-50 avatar-rounded">
-              <div class="caption ms-3 d-none d-md-block ">
+          <li class="nav-item dropdown" ref="dropdownRef">
+            <a class="py-0 nav-link d-flex align-items-center" href="#" @click.prevent="toggleDropdown">
+              <img src="/assets/images/avatars/01.png" alt="User-Profile" class="theme-color-default-img img-fluid avatar avatar-50 avatar-rounded">
+              <img src="/assets/images/avatars/avtar_1.png" alt="User-Profile" class="theme-color-purple-img img-fluid avatar avatar-50 avatar-rounded">
+              <img src="/assets/images/avatars/avtar_2.png" alt="User-Profile" class="theme-color-blue-img img-fluid avatar avatar-50 avatar-rounded">
+              <img src="/assets/images/avatars/avtar_4.png" alt="User-Profile" class="theme-color-green-img img-fluid avatar avatar-50 avatar-rounded">
+              <img src="/assets/images/avatars/avtar_5.png" alt="User-Profile" class="theme-color-yellow-img img-fluid avatar avatar-50 avatar-rounded">
+              <img src="/assets/images/avatars/avtar_3.png" alt="User-Profile" class="theme-color-pink-img img-fluid avatar avatar-50 avatar-rounded">
+              <div class="caption ms-3 d-none d-md-block">
                 <h6 class="mb-0 caption-title">{{ userDetails.email }}</h6>
                 <p class="mb-0 caption-sub-title">{{ userDetails.username }}</p>
               </div>
             </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <li><router-link to="/app/profile" class="dropdown-item" href="">Profile</router-link></li>
-              <li><a class="dropdown-item" href="">Privacy Setting</a>
-              </li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><button class="dropdown-item" @click="logout()">Logout</button>
-              </li>
+
+            <ul :class="['dropdown-menu', 'dropdown-menu-end', { show: dropdownOpen }]" aria-labelledby="navbarDropdown">
+              <li><router-link to="/app/profile" class="dropdown-item">Profile</router-link></li>
+              <li><a class="dropdown-item" href="#">Privacy Setting</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><button class="dropdown-item" @click="logout">Logout</button></li>
             </ul>
           </li>
-
         </ul>
       </div>
     </div>
   </nav>
-
 </template>
 
 <script setup>
 import Swal from 'sweetalert2'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { onMounted,ref,reactive,onBeforeUnmount } from 'vue'
-import SearchDropdown  from '@/components/Controls/SearchDropdown.vue'
+import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
+import SearchDropdown from '@/components/Controls/SearchDropdown.vue'
+
+const auth = useAuthStore()
+const router = useRouter()
 
 const isSmallScreen = ref(window.innerWidth < 576)
+const dropdownOpen = ref(false)
+const dropdownRef = ref(null)
+
+const userDetails = reactive({
+  username: '',
+  email: '',
+  fullName: '',
+  gender: '',
+  maritalStatus: '',
+})
 
 const handleResize = () => {
   isSmallScreen.value = window.innerWidth < 576
 }
 
-onMounted(() => {
-  window.addEventListener('resize', handleResize)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', handleResize)
-})
-
-
-const auth = useAuthStore()
-
-
-const userDetails = reactive({
-  username : '',
-  email:'',
-  fullName:'',
-  gender:'',
-  maritalStatus:'',
-}) 
-
-
-const fatchuser = async () => {
-  const user = await auth.user;
-  
-  userDetails.username = user.username
-  userDetails.email = user.email
-  
+const handleClickOutside = (e) => {
+  if (dropdownRef.value && !dropdownRef.value.contains(e.target)) {
+    dropdownOpen.value = false
+  }
 }
 
-onMounted( () => {
- fatchuser()
-})
+const toggleDropdown = () => {
+  dropdownOpen.value = !dropdownOpen.value
+}
 
-
-const router = useRouter()
+const fetchUser = async () => {
+  const user = await auth.user
+  userDetails.username = user.username
+  userDetails.email = user.email
+}
 
 const logout = async () => {
   const result = await Swal.fire({
@@ -151,31 +122,35 @@ const logout = async () => {
     showCancelButton: true,
     confirmButtonText: 'Yes, logout',
     cancelButtonText: 'Cancel',
-    confirmButtonColor: "red",
+    confirmButtonColor: 'red',
   })
 
   if (result.isConfirmed) {
     localStorage.removeItem('token')
-    auth.$reset() // Reset auth store state
+    auth.$reset()
 
     if (router.currentRoute.value.path !== '/') {
       router.push('/')
     } else {
-
-      router.replace({ path: '/login' }).then(() => {
-        router.replace('/')
-      })
+      router.replace({ path: '/login' }).then(() => router.replace('/'))
     }
   }
-
 }
 
+onMounted(() => {
+  fetchUser()
+  window.addEventListener('resize', handleResize)
+  document.addEventListener('click', handleClickOutside)
+})
 
-
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', handleResize)
+  document.removeEventListener('click', handleClickOutside)
+})
 </script>
 
 <style scoped>
-.dark .input-group-text{
-  border-color:#30384f ;
+.dark .input-group-text {
+  border-color: #30384f;
 }
 </style>

@@ -39,7 +39,7 @@ export const routes = [
   {
     path: '/app',
     component: () => import('@/components/LAYOUT/APPLayout.vue'),
-    redirect:'/app/dashboard',
+    redirect: '/app/dashboard',
     meta: { requiresAuth: true },
     children: [
       {
@@ -78,7 +78,7 @@ export const routes = [
             name: 'AddUsers',
             component: () => import('@/views/Dashboard/ManageUsers/Addusers.vue'),
             meta: {
-              permissions: ['manage-users','create-users'],
+              permissions: ['manage-users', 'create-users'],
               title: 'Add Users',
               breadcrumb: [
                 { label: 'Home', to: '/app/dashboard' },
@@ -92,12 +92,12 @@ export const routes = [
             name: 'UpdateUsers',
             component: () => import('@/views/Dashboard/ManageUsers/UpdateUser.vue'),
             meta: {
-              permissions: ['manage-users' , 'update-users'],
+              permissions: ['manage-users', 'update-users'],
               title: 'Update User',
               breadcrumb: [
                 { label: 'Home', to: '/app/dashboard' },
                 { label: 'Manage Users', to: '/app/users/manage' },
-                { label: 'Update User', to: '/app/users/Update/:id'}
+                { label: 'Update User', to: '/app/users/Update/:id' }
               ]
             }
           },
@@ -106,7 +106,7 @@ export const routes = [
             name: 'UserDetails                                                                                                                                                                                              ',
             component: () => import('@/views/Dashboard/ManageUsers/UserDetails.vue'),
             meta: {
-              permissions: ['manage-users' , 'view-users-details'],
+              permissions: ['manage-users', 'view-users-details'],
               title: 'User Details',
               breadcrumb: [
                 { label: 'Home', to: '/app/dashboard' },
@@ -116,7 +116,23 @@ export const routes = [
             }
           },
         ]
-      }
+      },
+      {
+        path: 'managerole',
+        name: 'managerole',
+        component: () => import('@/views/Dashboard/ManageRolePermission/RolePermission.vue'),
+        meta: {
+          permissions: ['manage-role'],
+          title: 'Manage Roles',
+          breadcrumb: [
+            { label: 'Home', to: '/app/dashboard' },
+            { label: 'Manage Roles', to: '/app/managerole' },
+          ]
+        }
+      },
+
+
+
     ]
   }
 ]

@@ -19,6 +19,7 @@
     />
 
     <div v-if="errorMessage" class="invalid-feedback">{{ errorMessage }}</div>
+    <div v-else-if="helper" class="form-text text-muted">{{ helper }}</div>
   </div>
 </template>
 
@@ -31,12 +32,11 @@ const props = defineProps({
   type: { type: String, default: 'text' },
   placeholder: { type: String, default: '' },
   is_required: { type: Boolean, default: false },
-  rules: { type: [String, Object], default: '' }
+  rules: { type: [String, Object], default: '' },
+  helper: { type: String, default: '' }
 })
 
 const { value, errorMessage, meta, handleBlur } = useField(props.name, props.rules)
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

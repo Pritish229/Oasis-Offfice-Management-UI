@@ -1,5 +1,5 @@
 <template>
-  <nav :key="auth.permissions.join('-')" class="nav navbar navbar-expand-lg navbar-light iq-navbar navs-sticky">
+  <nav class="nav navbar navbar-expand-lg navbar-light iq-navbar navs-sticky">
     <div class="container-fluid navbar-inner">
       <a href="" class="navbar-brand">
         <div class="logo-main">
@@ -83,14 +83,10 @@
               </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <li><router-link to="/app/profile" class="dropdown-item" href="">Profile</router-link></li>
-              <li><a class="dropdown-item" href="">Privacy Setting</a>
-              </li>
-              <li>
-                <hr class="dropdown-divider">
-              </li>
-              <li><button class="dropdown-item" @click="logout()">Logout</button>
-              </li>
+              <li><router-link class="dropdown-item" to="/app/profile">Profile</router-link></li>
+              <li><a class="dropdown-item" href="">Privacy Setting</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><button class="dropdown-item" @click="logout()">Logout</button></li>
             </ul>
           </li>
         </ul>
@@ -135,20 +131,24 @@ const logout = async () => {
 
   if (result.isConfirmed) {
     localStorage.removeItem('token')
-    auth.$reset() // Reset auth store state
-
-    if (router.currentRoute.value.path !== '/') {
-      router.push('/')
-    } else {
-
-      router.replace({ path: '/login' }).then(() => {
-        router.replace('/')
-      })
-    }
+    await Swal.fire({
+      title: 'Logged out!',
+      text: 'You have been logged out successfully.',
+      icon: 'success',
+      confirmButtonText: 'OK',
+    })
+    router.push('/')
   }
-
 }
 
-
-
+onMounted(async () => {
+  await fatchuser()
+  
+  nextTick(() => {
+    const dropdownElements = document.querySelectorAll('[data-bs-toggle="dropdown"]')
+    dropdownElements.forEach(el => {
+      new bootstrap.Dropdown(el)
+    })
+  })
+})
 </script>

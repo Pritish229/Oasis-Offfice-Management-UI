@@ -1,5 +1,5 @@
 <template>
-  <aside :key="auth.permissions.join('-')" :class="sidebarClasses">
+  <aside :class="sidebarClasses">
     <div class="sidebar-header d-flex align-items-center justify-content-start">
       <router-link to="/app/dashboard" class="navbar-brand">
         <div class="logo-main">
@@ -54,7 +54,7 @@
             </a>
           </li>
 
-          <li class="nav-item" v-if="hasPermission(['view-dashboard', 'manage-dashboard'])">
+          <li class="nav-item" v-if="hasPermission('view-dashboard')">
             <router-link to="/app/dashboard" class="nav-link" :class="{ active: route.path === '/app/dashboard' }">
               <FontAwesomeIcon :icon="['fas', 'house']" />
               <span class="item-name">Dashboard</span>
@@ -80,7 +80,7 @@
           </li>
 
           <!-- USERS DROPDOWN -->
-          <li class="nav-item" v-if="hasPermission(['view-users', 'manage-users'])">
+          <li class="nav-item" v-if="hasPermission('view-users')">
             <a href="javascript:void(0)" class="nav-link" @click="toggleDropdown('users')"
               :aria-expanded="dropdownState.users" :class="{ collapsed: !dropdownState.users }">
               <FontAwesomeIcon :icon="['fas', 'users']" />
@@ -93,13 +93,13 @@
               </i>
             </a>
             <ul :class="['sub-nav', 'collapse', { show: dropdownState.users }]" id="sidebar-users">
-              <li class="nav-item" v-if="hasPermission(['create-users', 'manage-users'])">
+              <li class="nav-item" v-if="hasPermission('create-users')">
                 <router-link class="nav-link" to="/app/users/add" :class="{ active: route.path === '/app/users/add' }">
                   <FontAwesomeIcon :icon="['fas', 'user-plus']" />
                   <span class="item-name">Add Users</span>
                 </router-link>
               </li>
-              <li class="nav-item" v-if="hasPermission(['view-users', 'manage-users'])">
+              <li class="nav-item" v-if="hasPermission('manage-users')">
                 <router-link class="nav-link" to="/app/users/manage"
                   :class="{ active: route.path === '/app/users/manage' }">
                   <FontAwesomeIcon :icon="['fas', 'users']" />
@@ -150,10 +150,13 @@ import { useAuthStore } from '@/stores/auth'
 import { ref, reactive, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
+// Get current route and auth store
 const route = useRoute()
 const auth = useAuthStore()
 
+// Track screen size for mobile sidebar
 const isMobile = ref(false)
+
 const checkScreenSize = () => {
   isMobile.value = window.innerWidth <= 768
 }
@@ -168,33 +171,39 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', checkScreenSize)
 })
 
+// Compute sidebar class based on screen size
 const sidebarClasses = computed(() => {
-  const base = ['sidebar', 'sidebar-default', 'sidebar-white', 'sidebar-base', 'navs-rounded-all']
-  if (isMobile.value) base.push('sidebar-mini')
-  return base
+  const baseClasses = ['sidebar', 'sidebar-default', 'sidebar-white', 'sidebar-base', 'navs-rounded-all']
+  if (isMobile.value) baseClasses.push('sidebar-mini')
+  return baseClasses
 })
 
-const hasPermission = (perms) => {
-  if (!Array.isArray(perms)) perms = [perms]
-  return perms.some(p => auth.permissions?.includes(p))
+// Permission check helper
+const hasPermission = (permission) => {
+  return auth.permissions?.includes(permission)
 }
 
-const dropdownState = reactive({ users: false, roles: false })
-const updateDropdownStateFromRoute = (path) => {
-  Object.keys(dropdownState).forEach(k => dropdownState[k] = path.startsWith(`/app/${k}`))
+// Reactive state for multiple dropdowns
+const dropdownState = reactive({
+  users: false,
+  roles: false,
+  // add other keys as needed
+})
+
+// Update dropdown open state based on route
+function updateDropdownStateFromRoute(path) {
+  Object.keys(dropdownState).forEach((key) => {
+    dropdownState[key] = path.startsWith(`/app/${key}`)
+  })
 }
 
-watch(() => route.path, updateDropdownStateFromRoute)
+// Watch route changes
+watch(() => route.path, (newPath) => {
+  updateDropdownStateFromRoute(newPath)
+})
 
-const toggleDropdown = (menu) => dropdownState[menu] = !dropdownState[menu]
-
-const permissionsKey = computed(() => auth.permissions.join('-'))
-
-watch(
-  () => auth.permissions.join('-'),
-  () => {
-    console.log('Permissions changed in Sidebar')
-  }
-)
+// Toggle dropdown manually
+function toggleDropdown(menu) {
+  dropdownState[menu] = !dropdownState[menu]
+}
 </script>
-

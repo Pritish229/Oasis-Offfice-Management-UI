@@ -77,7 +77,7 @@
               </div>
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="">Profile</a></li>
+              <li><router-link to="/app/profile" class="dropdown-item" href="">Profile</router-link></li>
               <li><a class="dropdown-item" href="">Privacy Setting</a>
               </li>
               <li>
@@ -118,7 +118,7 @@ onBeforeUnmount(() => {
 
 
 const auth = useAuthStore()
-const rolesName = ref([]);
+
 
 const userDetails = reactive({
   username : '',

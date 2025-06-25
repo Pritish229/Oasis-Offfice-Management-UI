@@ -130,6 +130,19 @@ export const routes = [
           ]
         }
       },
+      {
+        path: 'profile',
+        name: 'profile',
+        component: () => import('@/views/Dashboard/ManageProfile/Profile.vue'),
+        meta: {
+          permissions: ['view-profile' , 'edit-profile'],
+          title: 'Manage Profile',
+          breadcrumb: [
+            { label: 'Home', to: '/app/dashboard' },
+            { label: 'Manage Profile', to: '/app/profile' },
+          ]
+        }
+      },
 
 
 

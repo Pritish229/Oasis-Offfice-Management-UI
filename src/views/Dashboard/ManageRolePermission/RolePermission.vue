@@ -107,7 +107,7 @@
                                         <button class="btn btn-success btn-sm me-1" @click="saveEditGroup" title="Save">
                                         Save
                                     </button>
-                                    <button class="btn btn-secondary btn-sm" @click="cancelEditGroup" title="Cancel">
+                                    <button class="btn btn-secondary btn-sm" @click="cancelEditGroup" title="Cancle">
                                         Cancle
                                     </button>
                                     </div>

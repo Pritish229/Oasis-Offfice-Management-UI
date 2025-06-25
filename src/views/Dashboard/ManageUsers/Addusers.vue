@@ -34,8 +34,8 @@
             <h4>Address Information</h4>
             <BaseInput name="contactNo" label="Contact Number" :is_required="true" placeholder="Enter Contact No" />
             <BaseInput name="altNo" label="Alternate Number" placeholder="Enter Alternate No" />
-            <BaseTextArea name="presentAddress" label="Present Address" :is_required="true" />
-            <BaseTextArea name="permanentAddress" label="Permanent Address" />
+            <BaseTextArea name="presentAddress" placeholder="Enter Address" label="Present Address" :is_required="true" />
+            <BaseTextArea name="permanentAddress" placeholder="Enter Address" label="Permanent Address" />
           </div>
         </div>
       </div>

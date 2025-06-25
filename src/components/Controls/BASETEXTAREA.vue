@@ -5,18 +5,11 @@
       <small v-if="is_required" class="text-danger">*</small>
     </label>
 
-    <textarea
-      v-model="value"
-      :id="name"
-      :rows="rows"
-      :placeholder="placeholder"
-      class="form-control"
-      @blur="handleBlur"
+    <textarea v-model="value" :id="name" :rows="rows" :placeholder="placeholder" class="form-control" @blur="handleBlur"
       :class="{
         'is-invalid': errorMessage,
         'is-valid': meta.valid && meta.touched
-      }"
-    ></textarea>
+      }"></textarea>
 
     <div v-if="errorMessage" class="invalid-feedback">{{ errorMessage }}</div>
   </div>

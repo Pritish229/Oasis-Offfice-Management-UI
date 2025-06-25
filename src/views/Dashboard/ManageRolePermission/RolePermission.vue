@@ -169,9 +169,11 @@
                                 {{ rows.value.status === 1 ? 'Active' : 'Inactive' }}
                             </span>
                         </template>
-                        <template #roles>
+                        <template #roles="rows">
+
                             <v-select class="w-full" :options="allroles" :reduce="item => item._id" label="name"
-                                ></v-select>
+                                multiple v-model="rows.value.roles"
+                                @update:modelValue="roleChanged(rows.value, $event)"></v-select>
 
                         </template>
                     </vue3-datatable>
@@ -294,11 +296,11 @@ const userParams = reactive({
 
 const userCols = ref([
     { field: 'index', title: 'SL No', isUnique: true, sort: false },
-    { field: 'username', title: 'Username' ,cellClass:'w-auto'},
-    { field: 'fullName', title: 'Full Name',cellClass:'w-auto' },
-    { field: 'contactNo', title: 'Contact Number', sortable: true ,cellClass:'w-auto'},
-    { field: 'status', title: 'Status', sort: false , cellClass:'w-auto'},
-    { field: 'roles', title: 'Roles', sort: false , cellClass:'w-25'}
+    { field: 'username', title: 'Username', cellClass: 'w-auto' },
+    { field: 'fullName', title: 'Full Name', cellClass: 'w-auto' },
+    { field: 'contactNo', title: 'Contact Number', sortable: true, cellClass: 'w-auto' },
+    { field: 'status', title: 'Status', sort: false, cellClass: 'w-auto' },
+    { field: 'roles', title: 'Roles', sort: false, cellClass: 'w-25' }
 ])
 
 const schema = yup.object({
@@ -664,6 +666,29 @@ onMounted(() => {
         }
     })
 })
+
+const roleChanged = async (row, selectedRoleIds) => {
+    const payload = {
+        roleIds: selectedRoleIds
+    }
+    const response = await axios.patch(`${API_URL}/roles/${row._id}/roles`, payload)
+    if (response.status === 200) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'User roles updated successfully',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to update user roles'
+        });
+    }
+}
+
 </script>
 
 <style scoped>

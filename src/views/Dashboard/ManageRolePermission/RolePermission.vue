@@ -105,11 +105,12 @@
                                         ref="groupNameInput" />
                                     <div class="d-flex ">
                                         <button class="btn btn-success btn-sm me-1" @click="saveEditGroup" title="Save">
-                                        Save
-                                    </button>
-                                    <button class="btn btn-secondary btn-sm" @click="cancelEditGroup" title="Cancle">
-                                        Cancle
-                                    </button>
+                                            Save
+                                        </button>
+                                        <button class="btn btn-secondary btn-sm" @click="cancelEditGroup"
+                                            title="Cancle">
+                                            Cancle
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -157,13 +158,21 @@
                             </div>
                         </div>
                     </div>
-                    <vue3-datatable :rows="userRows" :columns="userCols" :loading="userLoading"
-                        :totalRows="user_total_rows" :isServerMode="true" :pageSize="userParams.pagesize"
-                        :sortable="true" :sortColumn="userParams.sort_column" :sortDirection="userParams.sort_direction"
-                        @change="changeServer" skin="bh-table-hover">
-                        <template #roles="data">
-                            <!-- Temporarily empty -->
-                            {{ data }}
+                    <vue3-datatable height="500px" :stickyHeader="true" :rows="userRows" :columns="userCols"
+                        :loading="userLoading" :totalRows="user_total_rows" :isServerMode="true"
+                        :pageSize="userParams.pagesize" skin="bh-table-hover" :sortable="true"
+                        :sortColumn="userParams.sort_column" :sortDirection="userParams.sort_direction"
+                        @change="changeServer">
+
+                        <template #status="rows">
+                            <span :class="['badge badge-pill', rows.value.status === 1 ? 'bg-success' : 'bg-danger']">
+                                {{ rows.value.status === 1 ? 'Active' : 'Inactive' }}
+                            </span>
+                        </template>
+                        <template #roles>
+                            <v-select class="w-full" :options="allroles" :reduce="item => item._id" label="name"
+                                ></v-select>
+
                         </template>
                     </vue3-datatable>
                 </div>
@@ -198,7 +207,7 @@
         submitButtonText="Update" submitButtonClass="btn btn-primary" :onSubmit="triggerUpdatePermissionSubmit"
         :onCancel="handleCancelEditPermission">
         <Form ref="editPermissionFormRef" :validation-schema="permissionSchema" @submit="handleUpdatePermission"
-            v-slot="{ errors, setFieldValue }">
+            v-slot="{ errors }">
             <div class="mb-3">
                 <BaseSelect name="groupName" label="Group Name" :options="permissionGroupOptions" :is_required="true"
                     placeholder="Select a group" />
@@ -215,7 +224,7 @@
         submitButtonText="Add" submitButtonClass="btn btn-primary" :onSubmit="triggerAddPermissionSubmit"
         :onCancel="handleCancelAddPermission">
         <Form ref="addPermissionFormRef" :validation-schema="permissionSchema" @submit="handleAddPermission"
-            v-slot="{ errors, setFieldValue }">
+            v-slot="{ errors }">
             <div class="mb-3">
                 <BaseSelect name="groupName" label="Group Name" :options="permissionGroupOptions" :is_required="true"
                     placeholder="Select a group" />
@@ -244,6 +253,7 @@ import BaseTextArea from '@/components/Controls/BASETEXTAREA.vue'
 import DropdownMenu from '@/components/Controls/DropdownMenu.vue'
 import BaseSelect from '@/components/Controls/BASESELECT.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
 
 const customModal = ref(null)
 const formRef = ref(null)
@@ -284,10 +294,11 @@ const userParams = reactive({
 
 const userCols = ref([
     { field: 'index', title: 'SL No', isUnique: true, sort: false },
-    { field: 'username', title: 'Username' },
-    { field: 'fullName', title: 'Full Name' },
-    { field: 'email', title: 'Email' },
-    { field: 'roles', title: 'Roles', sort: false }
+    { field: 'username', title: 'Username' ,cellClass:'w-auto'},
+    { field: 'fullName', title: 'Full Name',cellClass:'w-auto' },
+    { field: 'contactNo', title: 'Contact Number', sortable: true ,cellClass:'w-auto'},
+    { field: 'status', title: 'Status', sort: false , cellClass:'w-auto'},
+    { field: 'roles', title: 'Roles', sort: false , cellClass:'w-25'}
 ])
 
 const schema = yup.object({
@@ -669,6 +680,10 @@ onMounted(() => {
     color: #6c757d !important;
 }
 
+.vs__dropdown-toggle {
+    border: 3px solid rgb(7, 5, 5);
+}
+
 .permission-name {
     font-weight: 500;
     margin-bottom: 0.25rem;
@@ -685,5 +700,10 @@ onMounted(() => {
 .group-name-display:hover {
     color: #2563eb !important;
     text-decoration: underline;
+}
+
+.bh-table-hover td {
+    overflow: hidden;
+    position: relative;
 }
 </style>

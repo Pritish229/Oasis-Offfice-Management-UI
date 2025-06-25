@@ -124,3 +124,5 @@ onMounted(() => {
     getUsers();
 });
 </script>
+
+<style scoped></style>

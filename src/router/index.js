@@ -65,7 +65,7 @@ export const routes = [
             name: 'ManageUsers',
             component: () => import('@/views/Dashboard/ManageUsers/UserList.vue'),
             meta: {
-              permissions: ['view-users','manage-users'],
+              permissions: ['view-users'],
               title: 'Manage Users',
               breadcrumb: [
                 { label: 'Home', to: '/app/dashboard' },
@@ -135,7 +135,7 @@ export const routes = [
         name: 'profile',
         component: () => import('@/views/Dashboard/ManageProfile/Profile.vue'),
         meta: {
-          permissions: ['manage-profile'],
+          permissions: ['view-profile' , 'edit-profile'],
           title: 'Manage Profile',
           breadcrumb: [
             { label: 'Home', to: '/app/dashboard' },
@@ -182,11 +182,11 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (to.meta.permissions && to.meta.permissions.length > 0) {
-  const hasPermission = to.meta.permissions.some(p => auth.permissions.includes(p))
-  if (!hasPermission) {
-    return next('/unauthorized')
+    const hasPermissions = to.meta.permissions.every(p => auth.permissions.includes(p))
+    if (!hasPermissions) {
+      return next('/unauthorized')
+    }
   }
-}
 
   next()
 })

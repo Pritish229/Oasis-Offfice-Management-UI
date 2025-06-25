@@ -44,11 +44,24 @@
         </div>
 
         <div class="card p-4">
-            <h5>More info</h5>
+            <h5>Auth info</h5>
             <hr style="border-top: 1px solid black" />
             <div class="row">
-                
-              
+                <div class="col-lg-6" v-if="auth.hasPermission('manage-users') || auth.hasPermission('update-users')">
+                    <div class="mb-2">
+                        <label class="form-label">Username</label>
+                        <div class="form-control disabled">
+                            {{ username }}
+                        </div>
+                    </div>
+                    <BASEINPUT name="email" label="Email" :component="BASEINPUT" type="email" :is_required="true"
+                        placeholder="Enter Email" />
+                    <BASEINPUT name="password" label="Password" :component="BASEINPUT" type="text" :is_required="true"
+                        placeholder="Enter Password" />
+                    <BASESELECT name="status" label="Status" :component="BASESELECT" :is_required="true"
+                        :options="statusopion" />
+
+                </div>
 
             </div>
         </div>

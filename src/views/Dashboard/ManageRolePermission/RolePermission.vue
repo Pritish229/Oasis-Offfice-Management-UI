@@ -105,11 +105,12 @@
                                         ref="groupNameInput" />
                                     <div class="d-flex ">
                                         <button class="btn btn-success btn-sm me-1" @click="saveEditGroup" title="Save">
-                                        Save
-                                    </button>
-                                    <button class="btn btn-secondary btn-sm" @click="cancelEditGroup" title="Cancle">
-                                        Cancle
-                                    </button>
+                                            Save
+                                        </button>
+                                        <button class="btn btn-secondary btn-sm" @click="cancelEditGroup"
+                                            title="Cancle">
+                                            Cancle
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -157,13 +158,23 @@
                             </div>
                         </div>
                     </div>
-                    <vue3-datatable :rows="userRows" :columns="userCols" :loading="userLoading"
-                        :totalRows="user_total_rows" :isServerMode="true" :pageSize="userParams.pagesize"
-                        :sortable="true" :sortColumn="userParams.sort_column" :sortDirection="userParams.sort_direction"
-                        @change="changeServer" skin="bh-table-hover">
-                        <template #roles="data">
-                            <!-- Temporarily empty -->
-                            {{ data }}
+                    <vue3-datatable height="500px" :stickyHeader="true" :rows="userRows" :columns="userCols"
+                        :loading="userLoading" :totalRows="user_total_rows" :isServerMode="true"
+                        :pageSize="userParams.pagesize" skin="bh-table-hover" :sortable="true"
+                        :sortColumn="userParams.sort_column" :sortDirection="userParams.sort_direction"
+                        @change="changeServer">
+
+                        <template #status="rows">
+                            <span :class="['badge badge-pill', rows.value.status === 1 ? 'bg-success' : 'bg-danger']">
+                                {{ rows.value.status === 1 ? 'Active' : 'Inactive' }}
+                            </span>
+                        </template>
+                        <template #roles="rows">
+
+                            <v-select class="w-full" :options="allroles" :reduce="item => item._id" label="name"
+                                multiple v-model="rows.value.roles"
+                                @update:modelValue="roleChanged(rows.value, $event)"></v-select>
+
                         </template>
                     </vue3-datatable>
                 </div>
@@ -198,7 +209,7 @@
         submitButtonText="Update" submitButtonClass="btn btn-primary" :onSubmit="triggerUpdatePermissionSubmit"
         :onCancel="handleCancelEditPermission">
         <Form ref="editPermissionFormRef" :validation-schema="permissionSchema" @submit="handleUpdatePermission"
-            v-slot="{ errors, setFieldValue }">
+            v-slot="{ errors }">
             <div class="mb-3">
                 <BaseSelect name="groupName" label="Group Name" :options="permissionGroupOptions" :is_required="true"
                     placeholder="Select a group" />
@@ -215,7 +226,7 @@
         submitButtonText="Add" submitButtonClass="btn btn-primary" :onSubmit="triggerAddPermissionSubmit"
         :onCancel="handleCancelAddPermission">
         <Form ref="addPermissionFormRef" :validation-schema="permissionSchema" @submit="handleAddPermission"
-            v-slot="{ errors, setFieldValue }">
+            v-slot="{ errors }">
             <div class="mb-3">
                 <BaseSelect name="groupName" label="Group Name" :options="permissionGroupOptions" :is_required="true"
                     placeholder="Select a group" />
@@ -235,6 +246,7 @@ import * as yup from 'yup'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import dayjs from 'dayjs'
+import { useAuthStore } from '@/stores/auth'
 import Vue3Datatable from '@bhplugin/vue3-datatable'
 import '@bhplugin/vue3-datatable/dist/style.css'
 import { API_URL } from '@/config/path'
@@ -245,6 +257,7 @@ import DropdownMenu from '@/components/Controls/DropdownMenu.vue'
 import BaseSelect from '@/components/Controls/BASESELECT.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
+const auth = useAuthStore()
 const customModal = ref(null)
 const formRef = ref(null)
 const internalSubmit = ref(null)
@@ -284,10 +297,11 @@ const userParams = reactive({
 
 const userCols = ref([
     { field: 'index', title: 'SL No', isUnique: true, sort: false },
-    { field: 'username', title: 'Username' },
-    { field: 'fullName', title: 'Full Name' },
-    { field: 'email', title: 'Email' },
-    { field: 'roles', title: 'Roles', sort: false }
+    { field: 'username', title: 'Username', cellClass: 'w-auto' },
+    { field: 'fullName', title: 'Full Name', cellClass: 'w-auto' },
+    { field: 'contactNo', title: 'Contact Number', sortable: true, cellClass: 'w-auto' },
+    { field: 'status', title: 'Status', sort: false, cellClass: 'w-auto' },
+    { field: 'roles', title: 'Roles', sort: false, cellClass: 'w-25' }
 ])
 
 const schema = yup.object({
@@ -351,7 +365,13 @@ const fetchRolePermissions = async (roleId) => {
 const togglePermission = async (permissionId, allow) => {
     if (!selectedRole.value?._id) return Swal.fire('Error', 'No role selected', 'error')
     try {
-        await axios.post(`${API_URL}/roles/${selectedRole.value._id}/permissions`, { permissionId, allow })
+        const response = await axios.post(`${API_URL}/roles/${selectedRole.value._id}/permissions`, { permissionId, allow })
+
+        console.log();
+        if (response.status === 200) {
+            await auth.fetchProfile()
+        }
+        
         if (allow) assignedPermissions.value.push(permissionId)
         else assignedPermissions.value = assignedPermissions.value.filter(p => p !== permissionId)
     } catch (err) {
@@ -653,6 +673,41 @@ onMounted(() => {
         }
     })
 })
+
+const roleChanged = async (row, selectedRoleIds) => {
+  const auth = useAuthStore()
+
+  try {
+    Swal.fire({
+      title: 'Updating roles...',
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading()
+    })
+
+    const payload = { roleIds: selectedRoleIds }
+    const response = await axios.patch(`${API_URL}/roles/${row._id}/roles`, payload)
+    
+    if (response.status === 200) {
+        // This triggers sidebar re-render now
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'User roles updated successfully',
+        timer: 1500,
+        showConfirmButton: false
+      })
+    } else {
+      throw new Error('Failed to update user roles')
+    }
+  } catch (err) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Error',
+      text: err.response?.data?.message || err.message || 'Role update failed'
+    })
+  }
+}
+
 </script>
 
 <style scoped>
@@ -667,6 +722,10 @@ onMounted(() => {
 
 .text-secondary {
     color: #6c757d !important;
+}
+
+.vs__dropdown-toggle {
+    border: 3px solid rgb(7, 5, 5);
 }
 
 .permission-name {
@@ -685,5 +744,10 @@ onMounted(() => {
 .group-name-display:hover {
     color: #2563eb !important;
     text-decoration: underline;
+}
+
+.bh-table-hover td {
+    overflow: hidden;
+    position: relative;
 }
 </style>

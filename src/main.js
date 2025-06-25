@@ -11,8 +11,9 @@ import { useAuthStore } from '@/stores/auth'
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import '@bhplugin/vue3-datatable/dist/style.css';
-
+import vSelect from 'vue-select'
 import "bootstrap/dist/js/bootstrap.min.js";
+import 'vue-select/dist/vue-select.css';
 
 
 
@@ -26,6 +27,8 @@ app.use(router)
 
 app.component('FontAwesomeIcon', FontAwesomeIcon)
 app.component('VueDatePicker', VueDatePicker);
+
+app.component('v-select', vSelect)
 
 const auth = useAuthStore()
 auth.initialize?.() // optional: if you have an initialize() action

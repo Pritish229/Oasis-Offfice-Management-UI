@@ -5,18 +5,26 @@
         <div class="logo-main">
           <div class="logo-normal">
             <svg class="text-primary icon-30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)" fill="currentColor" />
-              <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)" fill="currentColor" />
-              <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor" />
-              <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor" />
+              <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)"
+                fill="currentColor" />
+              <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)"
+                fill="currentColor" />
+              <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)"
+                fill="currentColor" />
+              <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)"
+                fill="currentColor" />
             </svg>
           </div>
           <div class="logo-mini">
             <svg class="text-primary icon-30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)" fill="currentColor" />
-              <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)" fill="currentColor" />
-              <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)" fill="currentColor" />
-              <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)" fill="currentColor" />
+              <rect x="-0.757324" y="19.2427" width="28" height="4" rx="2" transform="rotate(-45 -0.757324 19.2427)"
+                fill="currentColor" />
+              <rect x="7.72803" y="27.728" width="28" height="4" rx="2" transform="rotate(-45 7.72803 27.728)"
+                fill="currentColor" />
+              <rect x="10.5366" y="16.3945" width="16" height="4" rx="2" transform="rotate(45 10.5366 16.3945)"
+                fill="currentColor" />
+              <rect x="10.5562" y="-0.556152" width="28" height="4" rx="2" transform="rotate(45 10.5562 -0.556152)"
+                fill="currentColor" />
             </svg>
           </div>
         </div>
@@ -31,8 +39,16 @@
         </i>
       </div>
 
-      <div class="input-group nav-search">
-        <SearchDropdown />
+      <div class="input-group search-input">
+        <span class="input-group-text" id="search-input">
+          <svg class="icon-18" width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5"
+              stroke-linecap="round" stroke-linejoin="round"></circle>
+            <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+              stroke-linejoin="round"></path>
+          </svg>
+        </span>
+        <input type="search" class="form-control" placeholder="Search...">
       </div>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -46,25 +62,31 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="mb-2 navbar-nav ms-auto align-items-center navbar-list mb-lg-0">
-          <li class="nav-item dropdown" ref="dropdownRef">
-            <a class="py-0 nav-link d-flex align-items-center" href="#" @click.prevent="toggleDropdown">
-              <img src="/assets/images/avatars/01.png" alt="User-Profile" class="theme-color-default-img img-fluid avatar avatar-50 avatar-rounded">
-              <img src="/assets/images/avatars/avtar_1.png" alt="User-Profile" class="theme-color-purple-img img-fluid avatar avatar-50 avatar-rounded">
-              <img src="/assets/images/avatars/avtar_2.png" alt="User-Profile" class="theme-color-blue-img img-fluid avatar avatar-50 avatar-rounded">
-              <img src="/assets/images/avatars/avtar_4.png" alt="User-Profile" class="theme-color-green-img img-fluid avatar avatar-50 avatar-rounded">
-              <img src="/assets/images/avatars/avtar_5.png" alt="User-Profile" class="theme-color-yellow-img img-fluid avatar avatar-50 avatar-rounded">
-              <img src="/assets/images/avatars/avtar_3.png" alt="User-Profile" class="theme-color-pink-img img-fluid avatar avatar-50 avatar-rounded">
+          <li class="nav-item dropdown">
+            <a class="py-0 nav-link d-flex align-items-center" href="#" id="navbarDropdown" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              <img src="/assets/images/avatars/01.png" alt="User-Profile"
+                class="theme-color-default-img img-fluid avatar avatar-50 avatar-rounded">
+              <img src="/assets/images/avatars/avtar_1.png" alt="User-Profile"
+                class="theme-color-purple-img img-fluid avatar avatar-50 avatar-rounded">
+              <img src="/assets/images/avatars/avtar_2.png" alt="User-Profile"
+                class="theme-color-blue-img img-fluid avatar avatar-50 avatar-rounded">
+              <img src="/assets/images/avatars/avtar_4.png" alt="User-Profile"
+                class="theme-color-green-img img-fluid avatar avatar-50 avatar-rounded">
+              <img src="/assets/images/avatars/avtar_5.png" alt="User-Profile"
+                class="theme-color-yellow-img img-fluid avatar avatar-50 avatar-rounded">
+              <img src="/assets/images/avatars/avtar_3.png" alt="User-Profile"
+                class="theme-color-pink-img img-fluid avatar avatar-50 avatar-rounded">
               <div class="caption ms-3 d-none d-md-block">
                 <h6 class="mb-0 caption-title">{{ userDetails.email }}</h6>
                 <p class="mb-0 caption-sub-title">{{ userDetails.username }}</p>
               </div>
             </a>
-
-            <ul :class="['dropdown-menu', 'dropdown-menu-end', { show: dropdownOpen }]" aria-labelledby="navbarDropdown">
-              <li><router-link to="/app/profile" class="dropdown-item">Profile</router-link></li>
-              <li><a class="dropdown-item" href="#">Privacy Setting</a></li>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+              <li><router-link class="dropdown-item" to="/app/profile">Profile</router-link></li>
+              <li><a class="dropdown-item" href="">Privacy Setting</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><button class="dropdown-item" @click="logout">Logout</button></li>
+              <li><button class="dropdown-item" @click="logout()">Logout</button></li>
             </ul>
           </li>
         </ul>
@@ -77,16 +99,10 @@
 import Swal from 'sweetalert2'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
-import SearchDropdown from '@/components/Controls/SearchDropdown.vue'
+import { onMounted, ref, reactive, nextTick } from 'vue'
+import * as bootstrap from 'bootstrap'
 
 const auth = useAuthStore()
-const router = useRouter()
-
-const isSmallScreen = ref(window.innerWidth < 576)
-const dropdownOpen = ref(false)
-const dropdownRef = ref(null)
-
 const userDetails = reactive({
   username: '',
   email: '',
@@ -95,25 +111,13 @@ const userDetails = reactive({
   maritalStatus: '',
 })
 
-const handleResize = () => {
-  isSmallScreen.value = window.innerWidth < 576
-}
-
-const handleClickOutside = (e) => {
-  if (dropdownRef.value && !dropdownRef.value.contains(e.target)) {
-    dropdownOpen.value = false
-  }
-}
-
-const toggleDropdown = () => {
-  dropdownOpen.value = !dropdownOpen.value
-}
-
-const fetchUser = async () => {
+const fatchuser = async () => {
   const user = await auth.user
   userDetails.username = user.username
   userDetails.email = user.email
 }
+
+const router = useRouter()
 
 const logout = async () => {
   const result = await Swal.fire({
@@ -122,35 +126,29 @@ const logout = async () => {
     showCancelButton: true,
     confirmButtonText: 'Yes, logout',
     cancelButtonText: 'Cancel',
-    confirmButtonColor: 'red',
+    confirmButtonColor: "red",
   })
 
   if (result.isConfirmed) {
     localStorage.removeItem('token')
-    auth.$reset()
-
-    if (router.currentRoute.value.path !== '/') {
-      router.push('/')
-    } else {
-      router.replace({ path: '/login' }).then(() => router.replace('/'))
-    }
+    await Swal.fire({
+      title: 'Logged out!',
+      text: 'You have been logged out successfully.',
+      icon: 'success',
+      confirmButtonText: 'OK',
+    })
+    router.push('/')
   }
 }
 
-onMounted(() => {
-  fetchUser()
-  window.addEventListener('resize', handleResize)
-  document.addEventListener('click', handleClickOutside)
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', handleResize)
-  document.removeEventListener('click', handleClickOutside)
+onMounted(async () => {
+  await fatchuser()
+  
+  nextTick(() => {
+    const dropdownElements = document.querySelectorAll('[data-bs-toggle="dropdown"]')
+    dropdownElements.forEach(el => {
+      new bootstrap.Dropdown(el)
+    })
+  })
 })
 </script>
-
-<style scoped>
-.dark .input-group-text {
-  border-color: #30384f;
-}
-</style>

@@ -2,7 +2,6 @@
   <Form
     :initial-values="auth.user"
     @submit="onSubmit"
-    v-slot="{ values }"
     enctype="multipart/form-data"
   >
         <div class="card p-4">

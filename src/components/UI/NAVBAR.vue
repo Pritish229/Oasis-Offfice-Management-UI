@@ -1,7 +1,7 @@
 <template>
   <nav class="nav navbar navbar-expand-lg navbar-light iq-navbar navs-sticky">
     <div class="container-fluid navbar-inner">
-      <a href="" class="navbar-brand">
+      <router-link to="/app/dashboard" class="navbar-brand">
         <div class="logo-main">
           <div class="logo-normal">
             <svg class="text-primary icon-30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -28,8 +28,8 @@
             </svg>
           </div>
         </div>
-        <h4 class="logo-title">Admin</h4>
-      </a>
+        <h4 class="logo-title">Welcome</h4>
+      </router-link>
 
       <div class="sidebar-toggle" data-toggle="sidebar" data-active="true">
         <i class="icon">
@@ -50,18 +50,7 @@
         </span>
         <input type="search" class="form-control" placeholder="Search...">
       </div>
-
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon">
-          <span class="mt-2 navbar-toggler-bar bar1"></span>
-          <span class="navbar-toggler-bar bar2"></span>
-          <span class="navbar-toggler-bar bar3"></span>
-        </span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="mb-2 navbar-nav ms-auto align-items-center navbar-list mb-lg-0">
+      <ul class="mb-2 navbar-nav ms-auto align-items-center navbar-list mb-lg-0">
           <li class="nav-item dropdown">
             <a class="py-0 nav-link d-flex align-items-center" href="#" id="navbarDropdown" role="button"
               data-bs-toggle="dropdown" aria-expanded="false">
@@ -90,7 +79,7 @@
             </ul>
           </li>
         </ul>
-      </div>
+
     </div>
   </nav>
 </template>

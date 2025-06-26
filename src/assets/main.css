@@ -30,6 +30,35 @@ html {
   color: #8a92a6 !important;
 }
 
+ .vs__dropdown-toggle {
+    border: 1px solid rgba(7, 5, 5, 0.219)  !important;
+    width: 100%;
+}
+
+.dark .vs__dropdown-toggle{
+  border: 1px solid rgba(216, 216, 216, 0.603)  !important;
+}
+
+
+
+.dark .vs__dropdown-menu{
+  background: #151824 !important;
+}
+
+.vs__open-indicator{
+transform: scale(0.8) !important;
+}
+.dark .vs__open-indicator{
+  fill: #cacaca !important;
+  
+}
+
+.vs__clear{
+  fill: #c03221 !important;
+  transform: scale(1);
+
+}
+
 .dark .dp__input {
   background: transparent;
   border: 1px solid #8a8787 !important;
@@ -78,8 +107,8 @@ html {
   color: white;
 }
 
-.bh-table-responsive table.bh-table-hover tbody tr:hover td{
-  color: black;
+.dark .bh-table-responsive table.bh-table-hover tbody tr:hover{
+  background-color: #6b6e6d2a;
 }
 
 .bh-pagination .bh-page-item.bh-active{

@@ -71,7 +71,7 @@
             <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
               <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
                 type="button" role="tab" aria-controls="nav-home" aria-selected="true">User Details</button>
-              <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
+              <button v-if="auth.hasPermission('manage-user-document')" class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
                 type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Documents</button>
               <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact"
                 type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Attendance</button>
@@ -127,9 +127,52 @@
               </div>
             </div>
 
-            <!-- Contact Info Tab -->
-            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <!-- Documents Tab -->
+            <div v-if="auth.hasPermission('manage-user-document')" class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
               <h5>Documents</h5>
+              <div v-if="docLoading" class="text-center my-4">
+                <div class="spinner-border" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+              <div v-else>
+                <div v-if="documents && documents.length > 0">
+                  <div class="table-responsive">
+                    <table class="table table-bordered align-middle">
+                      <thead>
+                        <tr>
+                          <th style="width: 80px;">SL NO.</th>
+                          <th>Document Name</th>
+                          <th style="width: 140px;">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="(doc, idx) in documents" :key="doc._id">
+                          <td>{{ idx + 1 }}</td>
+                          <td>{{ doc.docType }}</td>
+                          <td>
+                            <a :href="getDocumentUrl(doc.docUrl)" target="_blank" rel="noopener noreferrer" title="View" class="me-2">
+                              <FontAwesomeIcon :icon="['fas', 'eye']" />
+                            </a>
+                            <button @click="openUpdateModal(doc)" title="Edit" class="btn p-0 me-2">
+                              <FontAwesomeIcon :icon="['fas', 'pen-to-square']" />
+                            </button>
+                            <button @click="deleteDocument(doc._id)" title="Delete" class="btn p-0">
+                              <FontAwesomeIcon :icon="['fas', 'trash']" />
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <div v-else class="text-center text-muted my-4">
+                  <div>No documents available</div>
+                </div>
+                <div class="text-center mt-3" v-if="documents.length < 5">
+                  <button class="btn btn-primary" @click="openUploadModal">Upload Document</button>
+                </div>
+              </div>
             </div>
 
             <!-- Permissions Tab -->
@@ -144,6 +187,16 @@
           </div>
         </div>
       </div>
+
+      <!-- Always render the upload modal so the ref is set -->
+      <BaseModal ref="uploadModalRef" title="Upload Document" :onSubmit="handleUpload" @close="closeUploadModal">
+        <DocumentUpload
+          :docTypeOptions="docTypeOptions"
+          :docType="selectedDocType"
+          :existingFileUrl="existingFileUrl"
+          @change="onDocumentUploadChange"
+        />
+      </BaseModal>
     </div>
   </div>
 </template>
@@ -152,8 +205,13 @@
 import dayjs from 'dayjs';
 import axios from 'axios';
 import { API_URL } from '@/config/path.js';
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
+import BaseModal from '@/components/CONTROLS/BaseModal.vue';
+import DocumentUpload from '@/components/CONTROLS/DocumentUpload.vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import Swal from 'sweetalert2';
+import { useAuthStore } from '@/stores/auth';
 
 const route = useRoute();
 const userid = route.params.id;
@@ -162,6 +220,16 @@ const loading = ref(true);
 const roles = ref([]);
 const permissions = ref([]);
 const age = ref(null);
+const docLoading = ref(false);
+const documents = ref([]);
+const showUploadModal = ref(false);
+const uploadModalRef = ref(null);
+const isUpdateMode = ref(false);
+const selectedDocType = ref('');
+const fileToUpload = ref(null);
+const existingFileUrl = ref('');
+const fileRemoved = ref(false);
+let updateDocId = null;
 
 const userdata = reactive({
   username: '',
@@ -180,10 +248,19 @@ const userdata = reactive({
   status: ''
 });
 
+const auth = useAuthStore();
+
 const formatDate = (dob) => {
   return dob ? dayjs(dob).format('DD MMMM YYYY') : '-';
 };
 
+const docTypeOptions = [
+  { value: "Aadhar Card", label: "Aadhar Card" },
+  { value: "PAN Card", label: "PAN Card" },
+  { value: "Driving Licence", label: "Driving Licence" },
+  { value: "Bank Account Details", label: "Bank Account Details" },
+  { value: "Other Document", label: "Other Document" }
+];
 
 const fatchUser = async () => {
   loading.value = true;
@@ -223,8 +300,155 @@ const calculateAge = (dob) => {
   return today.diff(birthDate, 'year');
 };
 
+const fetchDocuments = async () => {
+  docLoading.value = true;
+  try {
+    const { data } = await axios.get(`${API_URL}/documents`, {
+      params: { userId: userid }
+    });
+    documents.value = data;
+  } catch (err) {
+    documents.value = [];
+  } finally {
+    docLoading.value = false;
+  }
+};
+
+const openUploadModal = () => {
+  isUpdateMode.value = false;
+  selectedDocType.value = '';
+  fileToUpload.value = null;
+  existingFileUrl.value = '';
+  showUploadModal.value = true;
+  fileRemoved.value = false;
+  nextTick(() => {
+    uploadModalRef.value?.show();
+  });
+};
+
+const closeUploadModal = () => {
+  uploadModalRef.value?.hide();
+  showUploadModal.value = false;
+  isUpdateMode.value = false;
+  selectedDocType.value = '';
+  fileToUpload.value = null;
+  existingFileUrl.value = '';
+  updateDocId = null;
+};
+
+const onDocumentUploadChange = ({ file, docType, removeExisting }) => {
+  fileToUpload.value = file;
+  selectedDocType.value = docType;
+  if (removeExisting) {
+    existingFileUrl.value = '';
+    fileRemoved.value = true;
+  }
+};
+
+const handleUpload = async () => {
+  if (!selectedDocType.value || !fileToUpload.value) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Missing Information',
+      text: 'Please select a document type and upload a PDF file.',
+    });
+    return;
+  }
+  const formData = new FormData();
+  formData.append('userId', userid);
+  formData.append('docType', selectedDocType.value);
+  formData.append('docUrl', fileToUpload.value);
+  if (fileRemoved.value) {
+    formData.append('removeExisting', 'true');
+  }
+
+  try {
+    if (isUpdateMode.value && updateDocId) {
+      // Update existing document
+      await axios.put(`${API_URL}/documents/${updateDocId}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      Swal.fire({
+        icon: 'success',
+        title: 'Document Updated',
+        text: 'Document updated successfully.',
+      });
+    } else {
+      // Upload new document
+      await axios.post(`${API_URL}/documents/upload`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+      Swal.fire({
+        icon: 'success',
+        title: 'Document Uploaded',
+        text: 'Document uploaded successfully.',
+      });
+    }
+    closeUploadModal();
+    fetchDocuments();
+    fileRemoved.value = false;
+  } catch (err) {
+    Swal.fire({
+      icon: 'error',
+      title: isUpdateMode.value ? 'Update Failed' : 'Upload Failed',
+      text: 'Failed to ' + (isUpdateMode.value ? 'update' : 'upload') + ' document.',
+    });
+  }
+};
+
+const getDocumentUrl = (url) => {
+  if (!url) return '';
+  if (url.startsWith('http')) return url;
+  if (url.startsWith('/uploads') || url.startsWith('uploads')) {
+    const cleanUrl = url.startsWith('/') ? url.slice(1) : url;
+    return `${API_URL}/${cleanUrl}`;
+  }
+  return `${API_URL}/${url.replace(/^\//, '')}`;
+};
+
+const openUpdateModal = (doc) => {
+  isUpdateMode.value = true;
+  selectedDocType.value = doc.docType;
+  existingFileUrl.value = doc.docUrl;
+  fileToUpload.value = null;
+  updateDocId = doc._id;
+  fileRemoved.value = false;
+  nextTick(() => {
+    uploadModalRef.value?.show();
+  });
+};
+
+const deleteDocument = async (docId) => {
+  const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: 'Are you sure you want to delete this document?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, delete it!'
+  });
+  if (!result.isConfirmed) return;
+  try {
+    await axios.delete(`${API_URL}/documents/${docId}`);
+    fetchDocuments();
+    Swal.fire({
+      icon: 'success',
+      title: 'Deleted!',
+      text: 'Document deleted successfully.',
+    });
+  } catch (err) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Delete Failed',
+      text: 'Failed to delete document.',
+    });
+  }
+};
+
 onMounted(() => {
   fatchUser();
+  fetchDocuments();
 });
 </script>
 

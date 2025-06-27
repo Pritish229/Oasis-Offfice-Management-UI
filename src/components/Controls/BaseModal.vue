@@ -16,7 +16,7 @@
           <button v-if="showClose" type="button" class="btn btn-secondary" @click="handleCancel">
             Cancel
           </button>
-          <button :class="submitButtonClass" @click="onSubmit">
+          <button :class="submitButtonClass" @click="props.onSubmit">
             {{ submitButtonText }}
           </button>
         </div>

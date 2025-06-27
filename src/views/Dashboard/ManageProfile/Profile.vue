@@ -95,6 +95,51 @@
         <!-- Documents Tab -->
         <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
           <h5>Documents</h5>
+          <div v-if="docLoading" class="text-center my-4">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+          <div v-else>
+            <div v-if="documents && documents.length > 0">
+              <div class="table-responsive">
+                <table class="table table-bordered align-middle">
+                  <thead>
+                    <tr>
+                      <th style="width: 80px;">SL NO.</th>
+                      <th>Document Name</th>
+                      <th style="width: 140px;">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(doc, idx) in documents" :key="doc._id">
+                      <td>{{ idx + 1 }}</td>
+                      <td>{{ doc.docType }}</td>
+                      <td>
+                        <a :href="getDocumentUrl(doc.docUrl)" target="_blank" rel="noopener noreferrer" title="View" class="me-2">
+                          <FontAwesomeIcon :icon="['fas', 'eye']" />
+                        </a>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div v-else class="text-center text-muted my-4">
+              <div>No documents available</div>
+            </div>
+            <div class="text-center mt-3" v-if="documents.length < 5 && auth.hasPermission('add-document')">
+              <button class="btn btn-primary" @click="openUploadModal">Upload Document</button>
+            </div>
+          </div>
+          <BaseModal ref="uploadModalRef" title="Upload Document" :onSubmit="handleUpload" @close="closeUploadModal">
+            <DocumentUpload
+              :docTypeOptions="docTypeOptions"
+              :docType="selectedDocType"
+              :existingFileUrl="existingFileUrl"
+              @change="onDocumentUploadChange"
+            />
+          </BaseModal>
         </div>
       </div>
     </div>
@@ -103,7 +148,7 @@
 
 <script setup>
 import { useAuthStore } from '@/stores/auth'
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch, nextTick } from "vue";
 import { Form } from 'vee-validate'
 import Swal from 'sweetalert2'
 import axios from 'axios'
@@ -114,6 +159,9 @@ import BaseTextArea from '@/components/Controls/BASETEXTAREA.vue'
 import BaseDatePicker from '@/components/Controls/BaseDatePicker.vue'
 import CropUpload from "@/components/Controls/CropUpload.vue";
 import BASESELECT from "@/components/Controls/BASESELECT.vue";
+import BaseModal from '@/components/CONTROLS/BaseModal.vue';
+import DocumentUpload from '@/components/CONTROLS/DocumentUpload.vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const auth = useAuthStore();
 const isSubmitting = ref(false);
@@ -132,12 +180,29 @@ const calculateAge = (dob) => {
   return today.diff(birthDate, 'year');
 };
 
+const docTypeOptions = [
+  { value: "Aadhar Card", label: "Aadhar Card" },
+  { value: "PAN Card", label: "PAN Card" },
+  { value: "Driving Licence", label: "Driving Licence" },
+  { value: "Bank Account Details", label: "Bank Account Details" },
+  { value: "Other Document", label: "Other Document" }
+];
+
+const docLoading = ref(false);
+const documents = ref([]);
+const showUploadModal = ref(false);
+const uploadModalRef = ref(null);
+const selectedDocType = ref('');
+const fileToUpload = ref(null);
+const existingFileUrl = ref('');
+
 onMounted(async () => {
   await auth.fetchProfile(); // Always fetch the latest profile from the backend
   if (auth.user) {
     age.value = calculateAge(auth.user.dob);
     imagePreview.value = auth.user.profilePic || null;
   }
+  fetchDocuments();
 });
 
 watch(() => auth.user, (newUser) => {
@@ -185,5 +250,87 @@ const onSubmit = async (values) => {
   } finally {
     isSubmitting.value = false;
   }
+};
+
+const fetchDocuments = async () => {
+  docLoading.value = true;
+  try {
+    const { data } = await axios.get(`${API_URL}/profile-documents/my-documents`, {
+      headers: { Authorization: `Bearer ${auth.token}` }
+    });
+    documents.value = data;
+  } catch (err) {
+    documents.value = [];
+  } finally {
+    docLoading.value = false;
+  }
+};
+
+const openUploadModal = () => {
+  selectedDocType.value = '';
+  fileToUpload.value = null;
+  existingFileUrl.value = '';
+  showUploadModal.value = true;
+  nextTick(() => {
+    uploadModalRef.value?.show();
+  });
+};
+
+const closeUploadModal = () => {
+  uploadModalRef.value?.hide();
+  showUploadModal.value = false;
+  selectedDocType.value = '';
+  fileToUpload.value = null;
+  existingFileUrl.value = '';
+};
+
+const onDocumentUploadChange = ({ file, docType }) => {
+  fileToUpload.value = file;
+  selectedDocType.value = docType;
+};
+
+const handleUpload = async () => {
+  if (!selectedDocType.value || !fileToUpload.value) {
+    Swal.fire({
+      icon: 'warning',
+      title: 'Missing Information',
+      text: 'Please select a document type and upload a PDF file.',
+    });
+    return;
+  }
+  const formData = new FormData();
+  formData.append('docType', selectedDocType.value);
+  formData.append('docUrl', fileToUpload.value);
+  try {
+    await axios.post(`${API_URL}/profile-documents/my-documents/upload`, formData, {
+      headers: {
+        Authorization: `Bearer ${auth.token}`,
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    closeUploadModal();
+    fetchDocuments();
+    Swal.fire({
+      icon: 'success',
+      title: 'Document Uploaded',
+      text: 'Document uploaded successfully.',
+    });
+  } catch (err) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Upload Failed',
+      text: 'Failed to upload document.',
+    });
+  }
+};
+
+const getDocumentUrl = (url) => {
+  if (!url) return '';
+  if (url.startsWith('http')) return url;
+  if (url.startsWith('/uploads') || url.startsWith('uploads')) {
+    const cleanUrl = url.startsWith('/') ? url.slice(1) : url;
+    return `${API_URL}/${cleanUrl}`;
+  }
+  return `${API_URL}/${url.replace(/^\//, '')}`;
 };
 </script>

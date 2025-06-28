@@ -79,7 +79,7 @@ const handleLogin = async () => {
 
   try {
     await auth.login({ identifier: identifier.value, password: password.value })
-    router.push('/app/dashboard')
+    window.location.href = '/app/dashboard';
   } catch (err) {
     console.error('Login Error:', err)
     console.error('Response:', err.response?.data)

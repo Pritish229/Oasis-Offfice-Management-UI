@@ -66,7 +66,7 @@ export const routes = [
 						component: () =>
 							import("@/views/Dashboard/ManageUsers/UserList.vue"),
 						meta: {
-							permissions: ["view-users"],
+							permissions: ["view-users","manage-users"],
 							title: "Manage Users",
 							breadcrumb: [
 								{ label: "Home", to: "/app/dashboard" },
@@ -162,6 +162,10 @@ router.afterEach((to) => {
 	document.title = to.meta.title || defaultTitle;
 });
 
+function hasAnyPermission(requiredPermissions = [], userPermissions = []) {
+  return requiredPermissions.some((p) => userPermissions.includes(p));
+}
+
 router.beforeEach(async (to, from, next) => {
 	const auth = useAuthStore();
 	const token = localStorage.getItem("token");
@@ -183,13 +187,12 @@ router.beforeEach(async (to, from, next) => {
 		return next("/app/dashboard");
 	}
 
-	if (to.meta.permissions && to.meta.permissions.length > 0) {
-		const hasPermissions = to.meta.permissions.every((p) =>
-			auth.permissions.includes(p)
-		);
-		if (!hasPermissions) {
-			return next("/unauthorized");
-		}
+	if (
+		to.meta.permissions &&
+		to.meta.permissions.length > 0 &&
+		!hasAnyPermission(to.meta.permissions, auth.permissions)
+	) {
+		return next("/unauthorized");
 	}
 
 	next();

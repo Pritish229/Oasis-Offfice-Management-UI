@@ -1,36 +1,41 @@
 <template>
-  <SIDEBAR />
-  <main class="main-content">
-    <div class="position-relative iq-banner">
-      <NAVBAR />
-      <BREADCRUMB />
-      <div class="conatiner-fluid  content-inner mt-n5 py-0">
-        <RouterView />
+  <div class="layout-wrapper">
+    <SIDEBAR />
+    <main class="main-content">
+      <div class="position-relative iq-banner">
+        <NAVBAR />
+        <BREADCRUMB />
+        <div class="container-fluid content-inner mt-n5 py-0">
+          <RouterView />
+        </div>
       </div>
-    </div>
-  
-    <FOOTER></FOOTER>
-    <SETTINGS />
-
-  </main>
+      <FOOTER />
+      <SETTINGS />
+    </main>
+  </div>
 </template>
-<RouterView /> 
 
 <script setup>
-import {RouterView, } from 'vue-router'
-import SIDEBAR from '@/components/UI/SIDEBAR.vue';
-import FOOTER from '@/components/UI/FOOTER.vue';
-import NAVBAR from '@/components/UI/NAVBAR.vue';
-import BREADCRUMB from '@/components/UI/BREADCRUMB.vue';
-import SETTINGS from '@/components/UI/SETTINGS.vue';
-import { onMounted } from 'vue';
+import { RouterView } from 'vue-router'
+import { onMounted, nextTick } from 'vue'
 
+// Component Imports
+import SIDEBAR from '@/components/UI/SIDEBAR.vue'
+import FOOTER from '@/components/UI/FOOTER.vue'
+import NAVBAR from '@/components/UI/NAVBAR.vue'
+import BREADCRUMB from '@/components/UI/BREADCRUMB.vue'
+import SETTINGS from '@/components/UI/SETTINGS.vue'
+
+/**
+ * Loads an external script only once.
+ */
 function loadScriptOnce(src) {
   return new Promise((resolve, reject) => {
     if (document.querySelector(`script[src="${src}"]`)) {
       resolve()
       return
     }
+
     const script = document.createElement('script')
     script.src = src
     script.async = false
@@ -41,34 +46,39 @@ function loadScriptOnce(src) {
 }
 
 onMounted(async () => {
+  await nextTick()
+
   try {
-    // Load core dependencies sequentially
-    await loadScriptOnce('/assets/js/core/libs.min.js')
-    await loadScriptOnce('/assets/js/core/external.min.js')
+    // Load critical scripts sequentially
+    const criticalScripts = [
+      '/assets/js/core/libs.min.js',
+      '/assets/js/core/external.min.js',
+      '/assets/js/plugins/setting.js',
+      '/assets/js/hope-ui.js',
+      '/assets/js/charts/dashboard.js'
+    ]
 
-    // Load critical Hope UI scripts sequentially and **before** others
-    await loadScriptOnce('/assets/js/plugins/setting.js')
-    await loadScriptOnce('/assets/js/hope-ui.js')
-    await loadScriptOnce('/assets/js/charts/dashboard.js')
+    for (const src of criticalScripts) {
+      await loadScriptOnce(src)
+    }
 
-    // Load the rest asynchronously (fire & forget)
+    // Load non-critical scripts in parallel
     const otherScripts = [
       '/assets/js/charts/widgetcharts.js',
       '/assets/js/charts/vectore-chart.js',
-      '/assets/js/charts/dashboard.js',
       '/assets/js/plugins/fslightbox.js',
       '/assets/js/plugins/slider-tabs.js',
       '/assets/js/plugins/form-wizard.js',
-      '/assets/vendor/aos/dist/aos.js',
+      '/assets/vendor/aos/dist/aos.js'
     ]
 
-    otherScripts.forEach(src => loadScriptOnce(src))
+    otherScripts.forEach(src =>
+      loadScriptOnce(src).catch(err =>
+        console.warn(`Optional script failed to load: ${src}`, err)
+      )
+    )
   } catch (error) {
-    console.error('Script loading error:', error)
+    console.error('Critical script loading failed:', error)
   }
 })
-
-
-
-
 </script>

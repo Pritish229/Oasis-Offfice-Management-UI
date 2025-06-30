@@ -3,7 +3,7 @@
         <!-- Search and Add Button -->
         <div class="row pt-3">
             <span class="col-lg-4 mb-3">
-                <router-link to="/app/users/add">
+                <router-link to="/app/users/add" v-if="auth.hasPermission(['manage-users','view-users'])">
                     <button class="btn btn-primary">
                         <FontAwesomeIcon :icon="['fas', 'fa-circle-plus']" class="me-2" />
                         Add New
@@ -35,10 +35,10 @@
             <!-- Actions Column -->
             <template #actions="rows">
                 <div class="d-flex justify-content-start gap-3">
-                    <router-link :to="`/app/users/Details/${rows.value._id}`" title="View">
+                    <router-link :to="`/app/users/Details/${rows.value._id}`" title="View" v-if="auth.hasPermission(['manage-users', 'view-users-details'])">
                         <FontAwesomeIcon :icon="['fas', 'fa-eye']" class="text-success" />
                     </router-link>
-                    <router-link :to="`/app/users/Update/${rows.value._id}`" title="Edit">
+                    <router-link :to="`/app/users/Update/${rows.value._id}`" title="Edit" v-if="auth.hasPermission(['manage-users', 'update-users'])"> 
                         <FontAwesomeIcon :icon="['fas', 'fa-pen-to-square']" />
                     </router-link>
                 </div>
@@ -54,7 +54,10 @@ import '@bhplugin/vue3-datatable/dist/style.css';
 import axios from 'axios';
 import { API_URL } from '@/config/path.js';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { useAuthStore } from '@/stores/auth'
 
+
+const auth = useAuthStore()
 const loading = ref(true);
 const rows = ref([]);
 const total_rows = ref(0);

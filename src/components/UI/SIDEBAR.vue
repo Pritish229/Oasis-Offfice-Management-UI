@@ -99,7 +99,7 @@
                   <span class="item-name">Add Users</span>
                 </router-link>
               </li>
-              <li class="nav-item" v-if="hasPermission('manage-users')">
+              <li class="nav-item" v-if="hasPermission(['manage-users','view-users'])">
                 <router-link class="nav-link" to="/app/users/manage"
                   :class="{ active: route.path === '/app/users/manage' }">
                   <FontAwesomeIcon :icon="['fas', 'users']" />

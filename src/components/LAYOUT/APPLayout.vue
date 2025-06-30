@@ -26,6 +26,13 @@ import NAVBAR from '@/components/UI/NAVBAR.vue'
 import BREADCRUMB from '@/components/UI/BREADCRUMB.vue'
 import SETTINGS from '@/components/UI/SETTINGS.vue'
 
+// Store & Socket
+import { onSocket } from '@/utils/socketManager.js'
+import { useAuthStore } from '@/stores/auth'
+
+// Instantiate store
+const auth = useAuthStore()
+
 /**
  * Loads an external script only once.
  */
@@ -49,6 +56,14 @@ onMounted(async () => {
   await nextTick()
 
   try {
+    // Real-time permission update listener
+    onSocket('permissionUpdated', async ({ roleId }) => {
+      const userRole = auth.user?.role?._id || auth.user?.role
+      if (userRole === roleId) {
+        await auth.fetchProfile()
+      }
+    })
+
     // Load critical scripts sequentially
     const criticalScripts = [
       '/assets/js/core/libs.min.js',

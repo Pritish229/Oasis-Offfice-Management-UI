@@ -42,7 +42,6 @@ export const useAuthStore = defineStore('auth', {
         this.user = res.data
         this.permissions = (res.data.permissions || []).map(p => p.name)
 
-        // Optionally set axios header globally
         axios.defaults.headers.common['Authorization'] = `Bearer ${this.token}`
       } catch (err) {
         this.logout()
@@ -66,6 +65,10 @@ export const useAuthStore = defineStore('auth', {
           this.logout()
         }
       }
+    },
+
+    setPermissions(permissions) {
+      this.permissions = permissions
     }
   }
 })
